@@ -1,0 +1,159 @@
+.header {
+  background-color: #e38b0a;
+  position: relative;
+  width: 100%;
+  height: 70px;
+  top: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.header .logoContainer .logo {
+  text-decoration: none;
+}
+.header .logoContainer .logo h1 {
+  color: white;
+  font-size: 34px;
+  font-family: cursive;
+}
+.header .logoContainer .logo span {
+  color: white;
+  position: relative;
+  top: -44px;
+  font-size: 8px;
+  left: 29px;
+}
+
+.header .navigation {
+  display: block;
+}
+
+.header .navigation ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.header .navigation ul li {
+  margin: 5px 15px;
+}
+
+.header .navigation ul li a {
+  color: white;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 18px;
+}
+
+.header .navigation ul li a:hover,
+.header .navigation ul li a:focus {
+  color: rgb(224, 219, 219);
+}
+
+.header .icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header .icons a {
+  color: white;
+}
+
+.header .icons a {
+  font-size: 18px;
+  margin: 10px;
+}
+.cartTag {
+  background-color: red;
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  text-align: center;
+  border-radius: 50%;
+  align-self: center;
+  justify-self: center;
+  top: 15px;
+  font-size: 12px;
+}
+
+.header .barIcon {
+  display: none;
+}
+
+.header .drawer {
+  background-color: #e18d10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 100vh;
+  z-index: 1;
+}
+.header .active {
+  display: none;
+}
+
+.drawerHeader {
+  background-color: #e18d10;
+  position: relative;
+  width: 100%;
+  height: 70px;
+  top: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+}
+
+.drawerHeader i:hover {
+  color: rgb(224, 219, 219);
+  cursor: pointer;
+}
+
+.drawerBody {
+}
+
+.drawerBody ul {
+  list-style: none;
+}
+
+.drawerBody ul li {
+  margin: 25px 10px;
+}
+
+.drawerBody ul li a {
+  color: white;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 18px;
+}
+
+footer {
+  background-color: black;
+  position: relative;
+  bottom: 0px;
+}
+footer h1 {
+  color: white;
+}
+
+@media screen and (max-width: 840px) {
+  .header .navigation {
+    display: none;
+  }
+
+  .header .icons {
+    display: none;
+  }
+
+  .header .icons i {
+    display: block;
+  }
+
+  .header .barIcon {
+    display: block;
+    color: white;
+  }
+}

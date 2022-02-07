@@ -1,0 +1,122 @@
+.backHome {
+  position: absolute;
+  top: 80px;
+  left: 50px;
+}
+
+.backHome i {
+  font-size: 22px;
+  color: black;
+}
+
+.backHome i:hover {
+  color: #a09e99;
+}
+
+.container {
+  margin-top: 6vh;
+}
+
+.container .productInfo {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.productInfo .productImage {
+  width: 500px;
+  height: 500px;
+  border: 0px solid black;
+}
+
+.productInfo .productImage img {
+  width: 100%;
+  height: 100%;
+}
+
+.productInfo .productDetail {
+  width: 60vh;
+  margin-left: 7vh;
+  margin-right: 7vh;
+}
+
+.productInfo .priceCard {
+  border: 1px solid gray;
+  height: max-content;
+  width: 180px;
+}
+
+.quantity select {
+  padding: 5px 10px;
+  border: 2px solid gray;
+}
+
+.priceCard div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+.priceCard div .addToCart {
+  background-color: #1b1b19;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  left: 12px;
+}
+
+.priceCard div .addToCart:active {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.reviewContainer {
+  align-items: center;
+  margin: 0 15vh;
+}
+
+.reviewContainer .writeReview {
+  width: 70vh;
+  margin-bottom: 10px;
+}
+
+.writeReview .form-control {
+  margin: 20px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.writeReview .form-control label {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+.writeReview .form-control select {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 2px solid gray;
+}
+.writeReview .form-control textarea {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: 2px solid gray;
+}
+
+.submitReview {
+  background-color: #1b1b19;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  position: relative;
+  left: 12px;
+}
+.submitReview:active {
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
