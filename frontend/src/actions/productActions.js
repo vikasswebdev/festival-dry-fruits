@@ -8,7 +8,7 @@ export const productsList = () => {
   return async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
-      const response = await fetch("http://localhost:5001/products");
+      const response = await fetch("http://localhost:5001/api/products");
       const data = await response.json();
       console.log(data);
       dispatch({

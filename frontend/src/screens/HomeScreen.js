@@ -19,6 +19,7 @@ const HomeScreen = () => {
     <>
       <SliderCom />
       <div className="productContainer">
+        <h1>Letest Product</h1>
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
