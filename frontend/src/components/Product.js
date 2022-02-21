@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Product = ({ product, id }) => {
+const Product = ({ product }) => {
   return (
     <div className="productCard">
       <div className="productImage">
-        <Link to={`/product/${id}`}>
+        <Link to={`/product/${product._id}`}>
           <img src={product.image} alt="" />
         </Link>
       </div>
       <div className="productInfo">
-        <Link to="/">
+        <Link to={`/product/${product._id}`}>
           <div className="productTitle">
             <strong>{product.name}</strong>
           </div>

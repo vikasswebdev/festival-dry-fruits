@@ -1,8 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import "../css/productscreen.css";
+import { useDispatch, useSelector } from "react-redux";
+import { productListDetails } from "../actions/productActions";
 
 const ProductScreen = () => {
+  const dispatch = useDispatch();
+
+  const productDetails = useSelector((state) => state.productDetails);
+
+  const { product, loading, error } = productDetails;
+  console.log("productDetails", product);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (!product._id || product._id !== id) {
+      dispatch(productListDetails(id));
+    }
+  }, [dispatch]);
+
   return (
     <>
       <div className="backHome">
@@ -13,10 +30,10 @@ const ProductScreen = () => {
       <div className="container">
         <div className="productInfo">
           <div className="productImage">
-            <img src="../../images/alexa.jpg" alt="" />
+            <img src={product.image} alt="" />
           </div>
           <div className="productDetail">
-            <h1>AMAZON ECHO DOT 3RD GENERATION</h1>
+            <h1>{product.name}</h1>
             <hr />
             <div className="rating">
               <i className="fas fa-star"></i>
@@ -24,43 +41,48 @@ const ProductScreen = () => {
               <i className="fas fa-star"></i>
               <i className="fas fa-star"></i>
               <i className="fas fa-star"></i>
-              <span> 0 reviews</span>
+              <span> {product.numReviews} reviews</span>
             </div>
             <hr />
             <div className="price">
-              <h3>Price: $99.99</h3>
+              <h3>Price: ${product.price}</h3>
             </div>
             <hr />
             <div className="description">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Pellentesque euismod, urna eu tincidunt consectetur, nisi urna
-                euismod nisi, eget egestas nisl nisl eget nisi.
-              </p>
+              <p>{product.description}</p>
             </div>
           </div>
           <div className="priceCard">
             <div className="price">
               <p>Price:</p>
-              <p>$99.99</p>
+              <p>${product.price}</p>
             </div>
             <hr style={{ color: "gray" }} />
             <div className="status">
               <p>Status:</p>
-              <p>In Stock</p>
+              <p>{product.countInStock > 0 ? "In Stock" : "Out Of Stock"}</p>
             </div>
             <hr style={{ color: "gray" }} />
-            <div className="quantity">
-              <p>Quantity:</p>
-              <select>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-              </select>
-            </div>
+            {product.countInStock > 0 && (
+              <div className="quantity">
+                <p>Quantity:</p>
+                <select>
+                  {[...Array(product.countInStock).keys()].map((x) => (
+                    <option key={x + 1} value={x + 1}>
+                      {x + 1}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <hr style={{ color: "gray" }} />
             <div>
-              <button className="addToCart">Add to Cart</button>
+              <button
+                className="addToCart"
+                disabled={product.countInStock === 0}
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>

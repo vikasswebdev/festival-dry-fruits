@@ -19,7 +19,9 @@ const HomeScreen = () => {
     <>
       <SliderCom />
       <div className="productContainer">
-        <h1>Letest Product</h1>
+        <h1 style={{ fontSize: 36, fontFamily: "sans-serif", marginLeft: 55 }}>
+          Letest Product
+        </h1>
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
