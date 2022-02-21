@@ -6,10 +6,12 @@ import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
+import { userRegisterReducer } from "./reducers/userReducers";
 
 const rootReducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
+  userRegister: userRegisterReducer,
 });
 
 const Store = createStore(
