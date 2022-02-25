@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../css/authscreen.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { userLoginAction } from "../actions/userActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginScreen = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const location = useLocation();
+
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const { loading, error, userInfo } = userLogin;
+
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, userInfo, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("login");
-    navigate("/");
+    dispatch(userLoginAction(email, password));
   };
 
   return (
@@ -21,6 +41,8 @@ const LoginScreen = () => {
             id="email"
             type="text"
             name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter Email"
           />
         </div>
@@ -29,6 +51,8 @@ const LoginScreen = () => {
           <input
             id="password"
             name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter Password"
             type="password"
           />

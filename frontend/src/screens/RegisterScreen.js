@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/authscreen.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userRegisterAction } from "../actions/userActions";
 
 const RegisterScreen = () => {
@@ -14,10 +14,28 @@ const RegisterScreen = () => {
 
   const dispatch = useDispatch();
 
+  const location = useLocation();
+
+  const navigate = useNavigate();
+
+  const userRegister = useSelector((state) => state.userRegister);
+
+  const { loading, error, userInfo } = userRegister;
+
+  // console.log(userInfo);
+
+  const redirect = location.search ? location.search.split("=")[1] : "/";
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate(redirect);
+    }
+  }, [navigate, userInfo, redirect]);
+
   const submitHandler = (e) => {
     e.preventDefault();
     if (password !== confirmpassword) {
-      setPassword("Password does not match");
+      setMessage("Password does not match");
     } else {
       dispatch(userRegisterAction(name, email, number, password));
     }
@@ -26,6 +44,8 @@ const RegisterScreen = () => {
   return (
     <div className="authForm">
       <h1>SIGN UP</h1>
+      {message && <h3>{message}</h3>}
+      {}
       <form onSubmit={submitHandler}>
         <div className="form-control">
           <label htmlFor="name">Name</label>

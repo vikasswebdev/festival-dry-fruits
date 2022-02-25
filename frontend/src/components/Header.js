@@ -1,12 +1,24 @@
 import React, { useRef } from "react";
 import { Link } from "react-router-dom";
-
+import { userLogoutAction } from "../actions/userActions";
+import { useDispatch } from "react-redux";
 const Header = () => {
   const toggleRef = useRef(null);
+  const dragRef = useRef(null);
+
+  const dispatch = useDispatch();
+
+  const toggleDrag = () => {
+    dragRef.current.classList.toggle("drag");
+  };
 
   const toggleDrawer = () => {
-    console.log("toggle drawer");
     toggleRef.current.classList.toggle("active");
+  };
+
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    dispatch(userLogoutAction());
   };
 
   return (
@@ -35,14 +47,27 @@ const Header = () => {
       </nav>
       <div className="icons">
         <Link to="/cart">
-          <i className="fas fa-shopping-cart"></i>
+          <i title="Cart" className="fas fa-shopping-cart"></i>
           <span className="cartTag">1</span>
         </Link>
-        <Link to="/profile">
-          <i className="fas fa-user"></i>
-        </Link>
+        <i
+          style={{ color: "white", margin: "0px 10px", cursor: "pointer" }}
+          onClick={toggleDrag}
+          title="User"
+          className="fas fa-user"
+        ></i>
+        <div className="dargDown" ref={dragRef}>
+          <ul>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+            <li>
+              <p onClick={logoutHandler}>Logout</p>
+            </li>
+          </ul>
+        </div>
         <Link to="/admin">
-          <i className="fas fa-user-cog"></i>
+          <i title="Admin" className="fas fa-user-cog"></i>
         </Link>
       </div>
       <i onClick={toggleDrawer} className="fas fa-bars barIcon"></i>

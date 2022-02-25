@@ -6,16 +6,31 @@ import {
   productDetailsReducer,
   productListReducer,
 } from "./reducers/productReducers";
-import { userRegisterReducer } from "./reducers/userReducers";
+import {
+  userRegisterReducer,
+  userLoginReducer,
+  userDetailsReducer,
+} from "./reducers/userReducers";
 
 const rootReducer = combineReducers({
   productList: productListReducer,
   productDetails: productDetailsReducer,
   userRegister: userRegisterReducer,
+  userLogin: userLoginReducer,
+  userDetails: userDetailsReducer,
 });
+
+const userInfoFromStorage = localStorage.getItem("userData")
+  ? JSON.parse(localStorage.getItem("userData"))
+  : null;
+
+const initialState = {
+  userLogin: { userInfo: userInfoFromStorage },
+};
 
 const Store = createStore(
   rootReducer,
+  initialState,
   composeWithDevTools(applyMiddleware(thunk))
 );
 
