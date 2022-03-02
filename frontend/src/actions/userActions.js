@@ -150,6 +150,15 @@ export const updateUserProfileAction = (user) => {
           Authorization: `Bearer ${userInfo.token}`,
         },
       });
+
+      const resData = await response.json();
+
+      dispatch({
+        type: USER_UPDATE_PROFILE_SUCCESS,
+        payload: resData,
+      });
+
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
     } catch (error) {
       const message =
         error.response && error.response.data.message

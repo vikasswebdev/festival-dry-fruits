@@ -204,3 +204,18 @@ footer h1 {
     color: white;
   }
 }
+
+.message {
+  position: absolute;
+  width: 85%;
+
+  backdrop-filter: blur(5px);
+}
+
+.danger {
+  background-color: #ff00003d;
+}
+
+.success {
+  background-color: green;
+}
