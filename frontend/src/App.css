@@ -42,7 +42,7 @@
 .header .navigation ul li a {
   color: white;
   text-decoration: none;
-  font-family: inherit;
+  font-family: monospace;
   font-size: 18px;
 }
 
@@ -96,14 +96,14 @@
 .header .icons div ul li a {
   color: black;
   text-decoration: none;
-  font-family: inherit;
+  font-family: monospace;
   font-size: 18px;
   margin: 0;
 }
 
 .header .icons div ul li p {
   color: black;
-  font-family: inherit;
+  font-family: monospace;
   font-size: 18px;
   margin: 0;
 }
@@ -173,7 +173,7 @@
 .drawerBody ul li a {
   color: white;
   text-decoration: none;
-  font-family: inherit;
+  font-family: monospace;
   font-size: 18px;
 }
 
@@ -217,5 +217,5 @@ footer h1 {
 }
 
 .success {
-  background-color: green;
+  background-color: #c3fbc3;
 }

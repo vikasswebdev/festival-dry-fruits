@@ -12,10 +12,10 @@ import Message from "../components/Message";
 const ProfileScreen = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -33,8 +33,6 @@ const ProfileScreen = () => {
 
   const { success } = userUpdateProfile;
 
-  // console.log(success);
-
   useEffect(() => {
     if (!userInfo) {
       navigate("/login");
@@ -44,39 +42,30 @@ const ProfileScreen = () => {
       } else {
         setName(user.name);
         setEmail(user.email);
+        setPhone(user.number);
       }
     }
   }, [dispatch, user, userInfo, navigate, success]);
 
-  const updateHandler = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       setMessage("Passwords do not match");
     } else {
       dispatch(
-        updateUserProfileAction({ id: user._id, name, email, password })
+        updateUserProfileAction({ id: user._id, name, email, phone, password })
       );
     }
   };
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage(null);
-      // setSuccessMessage(false);
-    }, 3000);
-
-    // i can't figure out how to make this work with the setTimeout successMessage
-  }, [message]);
-
   return (
     <div className="profileScreen">
       {message && <Message varient="danger">{message}</Message>}
-      {successMessage && <Message varient="success">Profile Updated</Message>}
+      {success && <Message varient="success">Profile Updated</Message>}
       <div className="userProfile">
         <h3>USER PROFILE</h3>
         <div className="userInfo">
-          <form className="form" onSubmit={updateHandler}>
+          <form className="form" onSubmit={submitHandler}>
             <div className="form-control">
               <label htmlFor="name">Name</label>
               <input
@@ -88,30 +77,40 @@ const ProfileScreen = () => {
               />
             </div>
             <div className="form-control">
-              <label htmlFor="name">Email Address</label>
+              <label htmlFor="email">Email Address</label>
               <input
-                type="text"
-                id="name"
+                type="email"
+                id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your Email Id"
               />
             </div>
             <div className="form-control">
-              <label htmlFor="name">Password</label>
+              <label htmlFor="phone">Phone Number</label>
               <input
                 type="text"
-                id="name"
+                id="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter your phone number"
+              />
+            </div>
+            <div className="form-control">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter Password"
               />
             </div>
             <div className="form-control">
-              <label htmlFor="name">Confirm Password</label>
+              <label htmlFor="confirmPassword">Confirm Password</label>
               <input
                 type="text"
-                id="name"
+                id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Enter Confirm Password"

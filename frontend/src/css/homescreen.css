@@ -2,6 +2,7 @@
 .slider {
   width: 100%;
   overflow-x: hidden;
+  min-height: 533px;
 }
 
 /* SLIDER END */
@@ -12,7 +13,7 @@
 }
 
 .productContainer {
-  margin: 15vh 0;
+  margin: 5vh 0;
   padding: 0 5vh;
 }
 

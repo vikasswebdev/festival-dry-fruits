@@ -4,6 +4,7 @@ import SliderCom from "../components/Slider";
 import "../css/homescreen.css";
 import { useSelector, useDispatch } from "react-redux";
 import { productsList } from "../actions/productActions";
+import Loader from "../components/Loader";
 
 const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
@@ -23,7 +24,15 @@ const HomeScreen = () => {
           Letest Product
         </h1>
         {loading ? (
-          <div>Loading...</div>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Loader />
+          </div>
         ) : error ? (
           <div>{error}</div>
         ) : (

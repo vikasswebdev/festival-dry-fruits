@@ -7,6 +7,7 @@
 .profileScreen .userProfile {
   padding: 0 10px;
   flex: 0.4;
+  border-right: 0.1px solid gray;
 }
 
 .profileScreen .userProfile h3,
@@ -41,6 +42,7 @@
   background-color: black;
   color: white;
   padding: 10px;
+  border: none;
 }
 
 .profileScreen .userProfile .userInfo .form .updateBtn:active {

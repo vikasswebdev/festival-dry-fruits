@@ -1,20 +1,35 @@
-import React, { useRef } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { userLogoutAction } from "../actions/userActions";
 import { useDispatch } from "react-redux";
 const Header = () => {
   const toggleRef = useRef(null);
   const dragRef = useRef(null);
+  const dragRefAdmin = useRef(null);
+
+  const location = useLocation();
 
   const dispatch = useDispatch();
 
   const toggleDrag = () => {
     dragRef.current.classList.toggle("drag");
+    dragRefAdmin.current.classList.remove("drag");
+  };
+
+  const toggleDragAdmin = () => {
+    dragRefAdmin.current.classList.toggle("drag");
+    dragRef.current.classList.remove("drag");
   };
 
   const toggleDrawer = () => {
     toggleRef.current.classList.toggle("active");
   };
+
+  useEffect(() => {
+    if (location.pathname === "/profile") {
+      dragRef.current.classList.remove("drag");
+    }
+  }, [location]);
 
   const logoutHandler = (e) => {
     e.preventDefault();
@@ -66,9 +81,26 @@ const Header = () => {
             </li>
           </ul>
         </div>
-        <Link to="/admin">
-          <i title="Admin" className="fas fa-user-cog"></i>
-        </Link>
+
+        <i
+          title="Admin"
+          style={{ color: "white", margin: "0px 10px", cursor: "pointer" }}
+          className="fas fa-user-cog"
+          onClick={toggleDragAdmin}
+        ></i>
+        <div className="dargDown" style={{ height: 92 }} ref={dragRefAdmin}>
+          <ul>
+            <li>
+              <Link to="/admin/userlist">Users</Link>
+            </li>
+            <li>
+              <Link to="/admin/productlist">Products</Link>
+            </li>
+            <li>
+              <Link to="/admin/orderlist">Orders</Link>
+            </li>
+          </ul>
+        </div>
       </div>
       <i onClick={toggleDrawer} className="fas fa-bars barIcon"></i>
       <div className="drawer active" ref={toggleRef}>

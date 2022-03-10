@@ -14,6 +14,9 @@ import {
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_RESET,
+  USER_LIST_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
 } from "../constants/userConstants";
 
 export const userRegisterAction = (name, email, number, password) => {
@@ -36,6 +39,8 @@ export const userRegisterAction = (name, email, number, password) => {
       const resData = await response.json();
       //   console.log("resData", resData);
       dispatch({ type: USER_REGISTER_SUCCESS, payload: resData });
+
+      dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
 
       localStorage.setItem("userData", JSON.stringify(resData));
     } catch (error) {
@@ -66,8 +71,6 @@ export const userLoginAction = (email, password) => {
       });
 
       const resData = await response.json();
-
-      console.log("resData", resData);
 
       dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
 
@@ -102,19 +105,17 @@ export const getUserDetailsAction = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      const config = {
+      console.log("userInfo", userInfo);
+
+      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: "GET",
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
         },
-      };
-
-      const response = await fetch(
-        `http://localhost:5001/api/users/${id}`,
-        config
-      );
+      });
 
       const resData = await response.json();
-      //console.log("resData", resData);
+
       dispatch({ type: USER_DETAILS_SUCCESS, payload: resData });
     } catch (error) {
       const message =
@@ -122,7 +123,7 @@ export const getUserDetailsAction = (id) => {
           ? error.response.data.message
           : error.message;
 
-      if (message === "Not authorized, token failed") {
+      if (message) {
         dispatch(userLogoutAction());
       }
 
@@ -149,6 +150,7 @@ export const updateUserProfileAction = (user) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
+        body: JSON.stringify(user),
       });
 
       const resData = await response.json();
@@ -159,18 +161,53 @@ export const updateUserProfileAction = (user) => {
       });
 
       dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
+
+      localStorage.setItem("userData", JSON.stringify(resData));
     } catch (error) {
       const message =
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
 
-      if (message === "Not authorized, token failed") {
+      if (message) {
         dispatch(userLogoutAction());
       }
 
       dispatch({
         type: USER_UPDATE_PROFILE_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const listUsersAction = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: USER_LIST_REQUEST });
+      const {
+        userLogin: { userInfo },
+      } = getState();
+      const response = await fetch("http://localhost:5001/api/users", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+
+      const resData = await response.json();
+
+      dispatch({ type: USER_LIST_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: USER_LIST_FAIL,
         payload: message,
       });
     }
