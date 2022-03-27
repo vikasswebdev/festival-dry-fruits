@@ -11,6 +11,9 @@ import {
   userLoginReducer,
   userDetailsReducer,
   userProfileUpdateReducer,
+  usersListReducer,
+  userDeleteReducer,
+  updateUserReducer,
 } from "./reducers/userReducers";
 
 const rootReducer = combineReducers({
@@ -20,6 +23,9 @@ const rootReducer = combineReducers({
   userLogin: userLoginReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userProfileUpdateReducer,
+  userList: usersListReducer,
+  userDelete: userDeleteReducer,
+  userUpdate: updateUserReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem("userData")
@@ -30,10 +36,12 @@ const initialState = {
   userLogin: { userInfo: userInfoFromStorage },
 };
 
+const middleware = [thunk];
+
 const Store = createStore(
   rootReducer,
   initialState,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
 export default Store;

@@ -17,7 +17,60 @@ import {
   USER_LIST_FAIL,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_FAIL,
+  UPDATE_USER_REQUEST,
+  UPDATE_USER_SUCCESS,
+  UPDATE_USER_FAIL,
 } from "../constants/userConstants";
+
+export const userLoginAction = (email, password) => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: USER_LOGIN_REQUEST });
+
+      const response = await fetch("http://localhost:5001/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const resData = await response.json();
+
+      if (resData.message === "Invalid email or paswword") {
+        dispatch({ type: USER_LOGIN_FAIL, payload: resData.message });
+      } else {
+        dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
+        localStorage.setItem("userData", JSON.stringify(resData));
+      }
+
+      // dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
+    } catch (error) {
+      dispatch({
+        type: USER_LOGIN_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+};
+
+export const userLogoutAction = () => {
+  return (dispatch) => {
+    localStorage.removeItem("userData");
+    dispatch({ type: USER_LOGOUT });
+    dispatch({ type: USER_DEATILS_RESET });
+    document.location.href = "/login";
+  };
+};
 
 export const userRegisterAction = (name, email, number, password) => {
   return async (dispatch) => {
@@ -55,47 +108,6 @@ export const userRegisterAction = (name, email, number, password) => {
   };
 };
 
-export const userLoginAction = (email, password) => {
-  return async (dispatch) => {
-    try {
-      dispatch({ type: USER_LOGIN_REQUEST });
-      const response = await fetch("http://localhost:5001/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const resData = await response.json();
-
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });
-
-      localStorage.setItem("userData", JSON.stringify(resData));
-    } catch (error) {
-      dispatch({
-        type: USER_LOGIN_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
-};
-
-export const userLogoutAction = () => {
-  return (dispatch) => {
-    localStorage.removeItem("userData");
-    dispatch({ type: USER_LOGOUT });
-    dispatch({ type: USER_DEATILS_RESET });
-    document.location.href = "/login";
-  };
-};
-
 export const getUserDetailsAction = (id) => {
   return async (dispatch, getState) => {
     try {
@@ -122,11 +134,9 @@ export const getUserDetailsAction = (id) => {
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message;
-
-      if (message) {
+      if (message === "Not authorized, token failed") {
         dispatch(userLogoutAction());
       }
-
       dispatch({
         type: USER_DETAILS_FAIL,
         payload: message,
@@ -185,9 +195,11 @@ export const listUsersAction = () => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: USER_LIST_REQUEST });
+
       const {
         userLogin: { userInfo },
       } = getState();
+
       const response = await fetch("http://localhost:5001/api/users", {
         method: "GET",
         headers: {
@@ -208,6 +220,85 @@ export const listUsersAction = () => {
       }
       dispatch({
         type: USER_LIST_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const deleteUser = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: DELETE_USER_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+
+      const resData = await response.json();
+
+      dispatch({ type: DELETE_USER_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: DELETE_USER_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const updatedUser = (user) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: UPDATE_USER_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(
+        `http://localhost:5001/api/users/${user._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify(user),
+        }
+      );
+
+      const resData = await response.json();
+
+      dispatch({ type: UPDATE_USER_SUCCESS });
+
+      dispatch({ type: USER_DETAILS_SUCCESS, payload: resData });
+
+      dispatch({ type: USER_DEATILS_RESET });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: UPDATE_USER_FAIL,
         payload: message,
       });
     }

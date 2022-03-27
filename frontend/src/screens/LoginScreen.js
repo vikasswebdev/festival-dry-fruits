@@ -3,6 +3,7 @@ import "../css/authscreen.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { userLoginAction } from "../actions/userActions";
 import { useDispatch, useSelector } from "react-redux";
+import Loader from "../components/Loader";
 
 const LoginScreen = () => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,7 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
+  console.log(location);
 
   const userLogin = useSelector((state) => state.userLogin);
 
@@ -34,6 +36,8 @@ const LoginScreen = () => {
   return (
     <div className="authForm">
       <h1>SIGN IN</h1>
+      {error && <div className="error">{error}</div>}
+      {loading && <Loader />}
       <form onSubmit={submitHandler}>
         <div className="form-control">
           <label htmlFor="email">Email Address</label>

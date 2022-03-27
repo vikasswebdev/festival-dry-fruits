@@ -55,7 +55,7 @@ const CartScreen = () => {
       <div className="priceCard">
         <div className="price">
           <h3>SUBTOTAL (2) ITEMS</h3>
-          <p>$99.99</p>
+          <p style={{ fontSize: 24 }}>$99.99</p>
         </div>
 
         <div className="checkout">

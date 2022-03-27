@@ -29,6 +29,9 @@ const Header = () => {
     if (location.pathname === "/profile") {
       dragRef.current.classList.remove("drag");
     }
+    if (location.pathname === "/admin/userlist") {
+      dragRefAdmin.current.classList.remove("drag");
+    }
   }, [location]);
 
   const logoutHandler = (e) => {
@@ -56,7 +59,7 @@ const Header = () => {
             <Link to="/category">Category</Link>
           </li>
           <li>
-            <Link to="/latest">Latest</Link>
+            <Link to="/blogs">Blog</Link>
           </li>
         </ul>
       </nav>
