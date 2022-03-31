@@ -32,6 +32,9 @@ const Header = () => {
     if (location.pathname === "/admin/userlist") {
       dragRefAdmin.current.classList.remove("drag");
     }
+    if (location.pathname === "/admin/productlist") {
+      dragRefAdmin.current.classList.remove("drag");
+    }
   }, [location]);
 
   const logoutHandler = (e) => {

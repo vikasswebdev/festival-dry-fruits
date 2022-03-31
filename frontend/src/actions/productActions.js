@@ -5,7 +5,14 @@ import {
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
   PRODUCT_DETAILS_FAIL,
+  PRODUCT_CREATE_FAIL,
+  PRODUCT_CREATE_REQUEST,
+  PRODUCT_CREATE_SUCCESS,
+  PRODUCT_UPDATE_FAIL,
+  PRODUCT_UPDATE_REQUEST,
+  PRODUCT_UPDATE_SUCCESS,
 } from "../constants/productConstants";
+import { userLogoutAction } from "./userActions";
 
 export const productsList = () => {
   return async (dispatch) => {
@@ -44,6 +51,86 @@ export const productListDetails = (id) => {
           error.response && error.response.data.message
             ? error.response.data.message
             : error.message,
+      });
+    }
+  };
+};
+
+export const productCreateAction = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_CREATE_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch("http://localhost:5001/api/products", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+        body: JSON.stringify({}),
+      });
+
+      const resData = await response.json();
+      console.log("product Created", resData);
+
+      dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: PRODUCT_CREATE_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const productUpdateAction = (product) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_UPDATE_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(
+        `http://localhost:5001/api/products/${product._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify(product),
+        }
+      );
+
+      const resData = await response.json();
+
+      dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: resData });
+
+      dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: PRODUCT_UPDATE_FAIL,
+        payload: message,
       });
     }
   };
