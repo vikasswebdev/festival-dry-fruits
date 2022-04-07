@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "../css/productlistscreen.css";
-import { productCreateAction, productsList } from "../actions/productActions";
+import {
+  productCreateAction,
+  productDeleteAction,
+  productsList,
+} from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +17,14 @@ const ProductListScreen = () => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const productDelete = useSelector((state) => state.productDelete);
+
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = productDelete;
 
   const productCreate = useSelector((state) => state.productCreate);
   const {
@@ -37,7 +49,13 @@ const ProductListScreen = () => {
     } else {
       dispatch(productsList());
     }
-  }, [dispatch, userInfo, successCreate, createdProduct]);
+  }, [dispatch, userInfo, successCreate, successDelete, createdProduct]);
+
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure")) {
+      dispatch(productDeleteAction(id));
+    }
+  };
 
   const createProductHandler = () => {
     dispatch(productCreateAction());
@@ -53,6 +71,30 @@ const ProductListScreen = () => {
           </button>
         </div>
       </div>
+      {loadingCreate && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Loader />
+        </div>
+      )}
+      {loadingDelete && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Loader />
+        </div>
+      )}
+      {errorCreate && <div className="error">{errorCreate}</div>}
+      {errorDelete && <div className="error">{errorDelete}</div>}
       {loading ? (
         <div
           style={{
@@ -93,6 +135,7 @@ const ProductListScreen = () => {
                     <i title="Edit" className="fa-solid fa-pen-to-square"></i>
                   </Link>
                   <i
+                    onClick={() => deleteHandler(product._id)}
                     title="Delete"
                     style={{ marginLeft: 10, cursor: "pointer" }}
                     className="fa-solid fa-trash-can"

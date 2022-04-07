@@ -11,6 +11,9 @@ import {
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
+  PRODUCT_DELETE_REQUEST,
+  PRODUCT_DELETE_SUCCESS,
+  PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 import { userLogoutAction } from "./userActions";
 
@@ -130,6 +133,42 @@ export const productUpdateAction = (product) => {
       }
       dispatch({
         type: PRODUCT_UPDATE_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const productDeleteAction = (id) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_DELETE_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(`http://localhost:5001/api/products/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+
+      const resData = await response.json();
+
+      dispatch({ type: PRODUCT_DELETE_SUCCESS });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: PRODUCT_DELETE_FAIL,
         payload: message,
       });
     }

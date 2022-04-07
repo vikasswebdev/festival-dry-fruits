@@ -53,25 +53,21 @@ const ProductEditScreen = () => {
     }
   }, [dispatch, product, id, navigate, successUpdate]);
 
-  const uploadFile = async (e) => {
-    const file = e.target.files[0];
-    // console.log("file", file);
-    let formData = new FormData();
-    formData.append("image", file);
+  const uploadHandler = async (e) => {
+    const file = e.target.files;
+    // console.log(file);
 
-    // console.log("formData", formData);
+    const formData = new FormData();
+    formData.append("image", file[0]);
 
     try {
-      const response = await fetch("http://localhost:5001/api/upload", {
+      const data = await fetch("http://localhost:5001/api/upload", {
         method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
         body: formData,
       });
-      const resData = await response.json();
-      console.log("res Data", resData);
-      setImage(resData);
+      const response = await data.json();
+      // console.log(response);
+      setImage(response);
     } catch (error) {
       console.log(error);
     }
@@ -143,7 +139,7 @@ const ProductEditScreen = () => {
               type="file"
               name="file"
               id="imagesFile"
-              onChange={uploadFile}
+              onChange={uploadHandler}
             />
           </div>
           <div className="form-control">

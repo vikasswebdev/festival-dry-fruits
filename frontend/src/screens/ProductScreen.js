@@ -30,7 +30,7 @@ const ProductScreen = () => {
       <div className="container">
         <div className="productInfo">
           <div className="productImage">
-            <img src={product.image} alt="" />
+            <img src={`http://localhost:5001${product.image}`} alt="" />
           </div>
           <div className="productDetail">
             <h1>{product.name}</h1>
