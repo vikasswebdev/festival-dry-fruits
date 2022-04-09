@@ -14,6 +14,9 @@ import {
   PRODUCT_DELETE_REQUEST,
   PRODUCT_DELETE_SUCCESS,
   PRODUCT_DELETE_FAIL,
+  PRODUCT_REVIEW_REQUEST,
+  PRODUCT_REVIEW_SUCCESS,
+  PRODUCT_REVIEW_FAIL,
 } from "../constants/productConstants";
 import { userLogoutAction } from "./userActions";
 
@@ -169,6 +172,46 @@ export const productDeleteAction = (id) => {
       }
       dispatch({
         type: PRODUCT_DELETE_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const createProductReviewAction = (productId, review) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: PRODUCT_REVIEW_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(
+        `http://localhost:5001/api/products/${productId}/reviews`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify(review),
+        }
+      );
+
+      const resData = await response.json();
+
+      dispatch({ type: PRODUCT_REVIEW_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({
+        type: PRODUCT_REVIEW_FAIL,
         payload: message,
       });
     }
