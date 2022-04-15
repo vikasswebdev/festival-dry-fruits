@@ -90,7 +90,15 @@ export const userRegisterAction = (name, email, number, password) => {
         }),
       });
       const resData = await response.json();
-      //   console.log("resData", resData);
+
+      console.log("resData", resData);
+
+      if (resData.message === "User already exists") {
+        dispatch({ type: USER_REGISTER_FAIL, payload: resData.message });
+        // document.location.href = "/register";
+        return;
+      }
+
       dispatch({ type: USER_REGISTER_SUCCESS, payload: resData });
 
       dispatch({ type: USER_LOGIN_SUCCESS, payload: resData });

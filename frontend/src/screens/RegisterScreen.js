@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../css/authscreen.css";
 import { useDispatch, useSelector } from "react-redux";
 import { userRegisterAction } from "../actions/userActions";
+import Loader from "../components/Loader";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -26,6 +27,8 @@ const RegisterScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
+  console.log(redirect);
+
   useEffect(() => {
     if (userInfo) {
       navigate(redirect);
@@ -45,7 +48,8 @@ const RegisterScreen = () => {
     <div className="authForm">
       <h1>SIGN UP</h1>
       {message && <h3>{message}</h3>}
-      {}
+      {error && <h3>{error}</h3>}
+      {loading && <Loader />}
       <form onSubmit={submitHandler}>
         <div className="form-control">
           <label htmlFor="name">Name</label>

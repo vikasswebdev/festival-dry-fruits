@@ -17,6 +17,9 @@ import {
   PRODUCT_REVIEW_REQUEST,
   PRODUCT_REVIEW_SUCCESS,
   PRODUCT_REVIEW_FAIL,
+  PRODUCT_TOP_LIST_FAIL,
+  PRODUCT_TOP_LIST_REQUEST,
+  PRODUCT_TOP_LIST_SUCCESS,
 } from "../constants/productConstants";
 import { userLogoutAction } from "./userActions";
 
@@ -201,6 +204,11 @@ export const createProductReviewAction = (productId, review) => {
 
       const resData = await response.json();
 
+      if (resData.message === "Product already reviewed") {
+        dispatch({ type: PRODUCT_REVIEW_FAIL, payload: resData.message });
+        return;
+      }
+
       dispatch({ type: PRODUCT_REVIEW_SUCCESS, payload: resData });
     } catch (error) {
       const message =
@@ -212,6 +220,31 @@ export const createProductReviewAction = (productId, review) => {
       }
       dispatch({
         type: PRODUCT_REVIEW_FAIL,
+        payload: message,
+      });
+    }
+  };
+};
+
+export const productTopList = () => {
+  return async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_TOP_LIST_REQUEST });
+
+      const response = await fetch("http://localhost:5001/api/products/top");
+
+      const resData = await response.json();
+
+      console.log("product top list", resData);
+
+      dispatch({ type: PRODUCT_TOP_LIST_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: PRODUCT_TOP_LIST_FAIL,
         payload: message,
       });
     }
