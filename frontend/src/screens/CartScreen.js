@@ -1,61 +1,102 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { addToCart, removeFromCartAction } from "../actions/cartActions";
 import "../css/cartscreen.css";
 
 const CartScreen = () => {
+  const { id } = useParams();
+
+  const location = useLocation();
+
+  const dispatch = useDispatch();
+
+  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+
+  const cart = useSelector((state) => state.cart);
+
+  const { cartItems } = cart;
+
+  // console.log("cartItems", cartItems);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(addToCart(id, qty));
+    }
+  }, [dispatch, id, qty]);
+
+  const removeFromCartHandler = (id) => {
+    dispatch(removeFromCartAction(id));
+  };
+
   return (
     <div className="cartScreen">
       <div className="cartProducts">
         <div>
           <h1>SHOPPING CART</h1>
         </div>
-        <div className="cartProduct">
-          <div className="cartProductImage">
-            <img src="../../images/alexa.jpg" alt="" />
-          </div>
-          <div className="productTitle">
-            <Link to="/">This is my first productPrice</Link>
-          </div>
-          <div className="productPrice">
-            <h1>$99.99</h1>
-          </div>
-          <div className="productQuantity">
-            <select>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-          </div>
-          <div className="productRemove">
-            <i class="fas fa-trash-alt"></i>
-          </div>
-        </div>
-        <div className="cartProduct">
-          <div className="cartProductImage">
-            <img src="../../images/alexa.jpg" alt="" />
-          </div>
-          <div className="productTitle">
-            <Link to="/">AMAZON ECHO DOT 3RD GENERATION</Link>
-          </div>
-          <div className="productPrice">
-            <h1>$99.99</h1>
-          </div>
-          <div className="productQuantity">
-            <select>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </select>
-          </div>
-          <div className="productRemove">
-            <i className="fas fa-trash-alt"></i>
-          </div>
+        <div className="cartItems">
+          {cartItems.length === 0 ? (
+            <div
+              style={{
+                backgroundColor: "#03a9f433",
+                border: "1px solid #ccc",
+                padding: 2,
+              }}
+            >
+              <p style={{ fontSize: 18, textAlign: "center" }}>
+                Your cart is empty <Link to={"/"}>Go Back</Link>
+              </p>
+            </div>
+          ) : (
+            cartItems.map((item) => (
+              <div className="cartProduct" key={item.product}>
+                <div className="cartProductImage">
+                  <img src={item.image} alt={item.name} />
+                </div>
+                <div className="productTitle">
+                  <Link to={`/product/${item.product}`}>{item.name}</Link>
+                </div>
+                <div className="productPrice">
+                  <h1>${item.price}</h1>
+                </div>
+                <div className="productQuantity">
+                  <select
+                    value={item.qty}
+                    onChange={(e) => {
+                      dispatch(addToCart(item.product, Number(e.target.value)));
+                    }}
+                  >
+                    {[...Array(item.countInStock).keys()].map((x) => (
+                      <option key={x + 1} value={x + 1}>
+                        {x + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="productRemove">
+                  <i
+                    className="fas fa-trash-alt"
+                    onClick={() => removeFromCartHandler(item.product)}
+                  ></i>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
       <div className="priceCard">
         <div className="price">
-          <h3>SUBTOTAL (2) ITEMS</h3>
-          <p style={{ fontSize: 24 }}>$99.99</p>
+          <h3>
+            SUBTOTAL ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+            ITEMS
+          </h3>
+          <p style={{ fontSize: 24 }}>
+            $
+            {cartItems
+              .reduce((acc, item) => acc + item.qty * item.price, 0)
+              .toFixed(2)}
+          </p>
         </div>
 
         <div className="checkout">

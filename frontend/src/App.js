@@ -33,6 +33,8 @@ function App() {
           <Route path="/payment" element={<PaymentScreen />} />
           <Route path="/shipping" element={<ShippingScreen />} />
           <Route path="/product/:id" element={<ProductScreen />} />
+          <Route path="/cart/:id" element={<CartScreen />} />
+          <Route path="/cart" element={<CartScreen />} />
           <Route path="/category" element={<CategoryScreen />} />
           <Route path="/blogs" element={<LatestScreen />} />
           <Route
@@ -42,7 +44,6 @@ function App() {
           <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
           <Route path="/admin/productlist" element={<ProductListScreen />} />
           <Route path="/admin/userlist" element={<UserListScreen />} />
-          <Route path="/cart" element={<CartScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/products" element={<ProductsScreen />} />
           <Route path="/" element={<HomeScreen />} />

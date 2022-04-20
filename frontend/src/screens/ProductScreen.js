@@ -70,6 +70,10 @@ const ProductScreen = () => {
     dispatch(createProductReviewAction(id, { rating, comment }));
   };
 
+  const addToCartHandler = () => {
+    navigate(`/cart/${id}?qty=${qty}`);
+  };
+
   return (
     <>
       {error && <div className="error">{error}</div>}
@@ -135,6 +139,7 @@ const ProductScreen = () => {
             <div>
               <button
                 className="addToCart"
+                onClick={addToCartHandler}
                 disabled={product.countInStock === 0}
               >
                 Add to Cart
