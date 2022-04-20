@@ -98,11 +98,17 @@
   align-items: center;
   justify-content: center;
 }
-.priceCard .checkout a {
+.priceCard .checkout button {
+  cursor: pointer;
   color: white;
   text-decoration: none;
   background-color: black;
   border: 1px solid black;
   font-size: 14px;
   padding: 15px;
+}
+
+.priceCard .checkout button:active{
+  color: black;
+  background-color: white;
 }

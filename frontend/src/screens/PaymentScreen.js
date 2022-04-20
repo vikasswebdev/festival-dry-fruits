@@ -4,7 +4,10 @@ import "../css/paymentscreen.css";
 import { useNavigate } from "react-router-dom";
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPayMentMethod] = useState("cod");
+  const [paymentMethod, setPayMentMethod] = useState("");
+
+  const [isCheckedOne, setIsCheckedOne] = useState(false);
+  const [isCheckedTwo, setIsCheckedTwo] = useState(false);
 
   const navigate = useNavigate();
 
@@ -12,8 +15,14 @@ const PaymentScreen = () => {
     e.preventDefault();
     console.log("Click on Payment method");
     console.log(paymentMethod);
-    navigate("/placeorder");
+    // navigate("/placeorder");
     //console.log(navigate);
+    const data = {
+      caseOnDelevery: isCheckedOne,
+      online: isCheckedTwo,
+    };
+
+    console.log("data", data);
   };
 
   return (
@@ -26,12 +35,30 @@ const PaymentScreen = () => {
           <div className="payment-form-control">
             <label htmlFor="payment">Case On Delivery</label>
             <input
-              type="radio"
+              type="checkbox"
               name="payment"
-              value={paymentMethod}
-              onChange={(e) => setPayMentMethod(e.target.value)}
+              value="cod"
+              checked={isCheckedOne}
+              onChange={() => {
+                setIsCheckedOne(!isCheckedOne);
+                setIsCheckedTwo(false);
+              }}
             />
           </div>
+          <div className="payment-form-control">
+            <label htmlFor="payment">onLine Payment</label>
+            <input
+              type="checkbox"
+              name="payment"
+              value="online"
+              checked={isCheckedTwo}
+              onChange={() => {
+                setIsCheckedTwo(!isCheckedTwo);
+                setIsCheckedOne(false);
+              }}
+            />
+          </div>
+
           <button type="submit" className="payMethBtn">
             Continue
           </button>

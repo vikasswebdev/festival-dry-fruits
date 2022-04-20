@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation, useParams } from "react-router-dom";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { addToCart, removeFromCartAction } from "../actions/cartActions";
 import "../css/cartscreen.css";
 
@@ -8,6 +8,8 @@ const CartScreen = () => {
   const { id } = useParams();
 
   const location = useLocation();
+
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -27,6 +29,11 @@ const CartScreen = () => {
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCartAction(id));
+  };
+
+  const chackOutHandler = () => {
+    // console.log("checkout");
+    navigate("/login?redirect=shipping");
   };
 
   return (
@@ -100,7 +107,8 @@ const CartScreen = () => {
         </div>
 
         <div className="checkout">
-          <Link to="/checkout">PROCEED TO CHECKOUT</Link>
+          {/* <Link to="/checkout">PROCEED TO CHECKOUT</Link> */}
+          <button onClick={chackOutHandler}> Proceed To Checkout</button>
         </div>
       </div>
     </div>

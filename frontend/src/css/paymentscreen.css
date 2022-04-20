@@ -17,14 +17,13 @@
   font-weight: 400;
 }
 
-.paymentContainer form {
-  margin: 0 15px;
-}
-
 .payment-form-control {
   margin-bottom: 15px;
   display: flex;
   align-items: center;
+  padding: 10px 20px;
+  justify-content: space-between;
+  width: 30%;
 }
 
 .payment-form-control input {

@@ -22,9 +22,11 @@ const LoginScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
+  console.log("redirect", redirect);
+
   useEffect(() => {
     if (userInfo) {
-      navigate(redirect);
+      navigate(`/${redirect}`);
     }
   }, [navigate, userInfo, redirect]);
 
