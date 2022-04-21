@@ -2,27 +2,28 @@ import React, { useState } from "react";
 import CheckoutSteps from "../components/CheckoutSteps";
 import "../css/paymentscreen.css";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { savePaymentMethod } from "../actions/cartActions";
 
 const PaymentScreen = () => {
-  const [paymentMethod, setPayMentMethod] = useState("");
-
-  const [isCheckedOne, setIsCheckedOne] = useState(false);
-  const [isCheckedTwo, setIsCheckedTwo] = useState(false);
-
   const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart);
+
+  const { shippingAddress } = cart;
+
+  if (!shippingAddress.address) {
+    navigate("/shipping");
+  }
+
+  const [paymentMethod, setPayMentMethod] = useState("Razorpay");
+
+  const dispatch = useDispatch();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("Click on Payment method");
-    console.log(paymentMethod);
-    // navigate("/placeorder");
-    //console.log(navigate);
-    const data = {
-      caseOnDelevery: isCheckedOne,
-      online: isCheckedTwo,
-    };
-
-    console.log("data", data);
+    console.log("paymentMethod", paymentMethod);
+    dispatch(savePaymentMethod(paymentMethod));
+    navigate("/placeorder");
   };
 
   return (
@@ -33,32 +34,15 @@ const PaymentScreen = () => {
         <h2>Select Method</h2>
         <form onSubmit={submitHandler}>
           <div className="payment-form-control">
-            <label htmlFor="payment">Case On Delivery</label>
+            <label htmlFor="payment">Razorpay</label>
             <input
               type="checkbox"
               name="payment"
-              value="cod"
-              checked={isCheckedOne}
-              onChange={() => {
-                setIsCheckedOne(!isCheckedOne);
-                setIsCheckedTwo(false);
-              }}
+              value="Razorpay"
+              checked
+              onChange={(e) => setPayMentMethod(e.target.value)}
             />
           </div>
-          <div className="payment-form-control">
-            <label htmlFor="payment">onLine Payment</label>
-            <input
-              type="checkbox"
-              name="payment"
-              value="online"
-              checked={isCheckedTwo}
-              onChange={() => {
-                setIsCheckedTwo(!isCheckedTwo);
-                setIsCheckedOne(false);
-              }}
-            />
-          </div>
-
           <button type="submit" className="payMethBtn">
             Continue
           </button>

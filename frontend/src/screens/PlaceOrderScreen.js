@@ -1,9 +1,41 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import CheckoutSteps from "../components/CheckoutSteps";
 import "../css/paymentscreen.css";
 
 const PlaceOrderScreen = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const cart = useSelector((state) => state.cart);
+
+  useEffect(() => {
+    if (!cart.shippingAddress.address) {
+      navigate("/shipping");
+    } else if (!cart.paymentMethod) {
+      navigate("/payment");
+    }
+  }, [cart, navigate]);
+
+  const addDecimal = (num) => {
+    return (Math.round(num * 100) / 100).toFixed(2);
+  };
+
+  cart.itemsPrice = addDecimal(
+    cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0) // sum of all items price
+  );
+
+  cart.shippingPrice = addDecimal(cart.itemsPrice > 500 ? 0 : 40); // shipping price is 40 if itemsPrice is less than 500 else 0
+
+  cart.taxPrice = addDecimal(Number(cart.itemsPrice * 0.1).toFixed(2)); // tax price is 18% of itemsPrice rounded to 2 decimal places
+
+  cart.totalPrice = (
+    Number(cart.itemsPrice) +
+    Number(cart.shippingPrice) +
+    Number(cart.taxPrice)
+  ).toFixed(); // total price is itemsPrice + shippingPrice + taxPrice
+
   return (
     <div className="placeOrderScreen">
       <CheckoutSteps step1 step2 step3 step4 />
@@ -11,31 +43,43 @@ const PlaceOrderScreen = () => {
         <div className="left">
           <div className="shipping">
             <h1>SHIPPING</h1>
-            <p>Address: VPO KHERAD, TAH. SALUBER, UDAIPUR 313027, India</p>
+            <p>
+              <strong> Address: </strong>
+              {cart.shippingAddress.address}, {cart.shippingAddress.city}{" "}
+              {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
+            </p>
           </div>
           <hr />
           <div className="paymentMeth">
             <h1>PAYMENT METHOD</h1>
-            <p>Method: PayPal</p>
+            <p>
+              <strong> Method: </strong> {cart.paymentMethod}
+            </p>
           </div>
           <hr />
           <div className="orderItemsContainer">
             <h1>ORDER ITEMS</h1>
             <div className="orderItems">
-              <div className="orderItem">
-                <div className="orderItemImg">
-                  <img src="../../images/alexa.jpg" />
+              {cart.cartItems.length === 0 ? (
+                <div>
+                  <h2>No items in cart</h2>
+                  <Link to="/">
+                    <button className="btn">Continue Shopping</button>
+                  </Link>
                 </div>
-                <Link to="/">Airpods Wireless Bluetooth Headphones</Link>
-                <p>1 x $89.99 = $89.99</p>
-              </div>
-              <div className="orderItem">
-                <div className="orderItemImg">
-                  <img src="../../images/alexa.jpg" />
-                </div>
-                <Link to="/">Airpods Wireless Bluetooth Headphones</Link>
-                <p>1 x $89.99 = $89.99</p>
-              </div>
+              ) : (
+                cart.cartItems.map((item, index) => (
+                  <div className="orderItem" key={index}>
+                    <div className="orderItemImg">
+                      <img src={item.image} alt={item.name} />
+                    </div>
+                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    <p>
+                      {item.qty} x ${item.price} = ${item.qty * item.price}
+                    </p>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -43,20 +87,20 @@ const PlaceOrderScreen = () => {
           <div className="orderSummary">
             <h2>ORDER SUMMARY</h2>
             <div className="ordSumItem">
-              <p>Items</p>
-              <p>$1019.98</p>
+              <p>Products</p>
+              <p>${cart.itemsPrice}</p>
             </div>
             <div className="ordSumItem">
               <p>Shipping</p>
-              <p>$1019.98</p>
+              <p>${cart.shippingPrice}</p>
             </div>
             <div className="ordSumItem">
               <p>Tax</p>
-              <p>$1019.98</p>
+              <p>${cart.taxPrice}</p>
             </div>
             <div className="ordSumItem">
               <p>Total</p>
-              <p>$1019.98</p>
+              <p>${cart.totalPrice}</p>
             </div>
             <div className="ordSumItem">
               <button className="orderSumBtn">PLACE ORDER</button>
