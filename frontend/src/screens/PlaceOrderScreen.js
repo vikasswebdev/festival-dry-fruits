@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { createOrderAction } from "../actions/orderActions";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { ORDER_CREATE_RESET } from "../constants/orderConstants";
+import { USER_DEATILS_RESET } from "../constants/userConstants";
 import "../css/paymentscreen.css";
 
 const PlaceOrderScreen = () => {
@@ -9,6 +12,8 @@ const PlaceOrderScreen = () => {
   const navigate = useNavigate();
 
   const cart = useSelector((state) => state.cart);
+
+  console.log("cart", cart);
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
@@ -35,6 +40,33 @@ const PlaceOrderScreen = () => {
     Number(cart.shippingPrice) +
     Number(cart.taxPrice)
   ).toFixed(); // total price is itemsPrice + shippingPrice + taxPrice
+
+  const orderCreate = useSelector((state) => state.orderCreate);
+
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      navigate(`/order/${order._id}`);
+      dispatch({ type: USER_DEATILS_RESET });
+      dispatch({ type: ORDER_CREATE_RESET });
+    }
+    // eslint-disable-next-line
+  }, [navigate, success]);
+
+  const placeOrderHandler = () => {
+    dispatch(
+      createOrderAction({
+        orderItems: cart.cartItems,
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+        itemsPrice: cart.itemsPrice,
+        shippingPrice: cart.shippingPrice,
+        taxPrice: cart.taxPrice,
+        totalPrice: cart.totalPrice,
+      })
+    );
+  };
 
   return (
     <div className="placeOrderScreen">
@@ -103,7 +135,9 @@ const PlaceOrderScreen = () => {
               <p>${cart.totalPrice}</p>
             </div>
             <div className="ordSumItem">
-              <button className="orderSumBtn">PLACE ORDER</button>
+              <button className="orderSumBtn" onClick={placeOrderHandler}>
+                PLACE ORDER
+              </button>
             </div>
           </div>
         </div>

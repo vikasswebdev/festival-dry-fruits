@@ -1,13 +1,13 @@
 import express from "express";
 import path from "path";
 import cors from "cors";
-import products from "../backend/data/products.js";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import productRoute from "./routes/productRoute.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -26,6 +26,7 @@ app.use("/api/products", productRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/payment", paymentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
@@ -34,8 +35,6 @@ app.get("/", (req, res) => {
   res.send("api is running");
 });
 
-const PORT = process.env.PORT || 5001;
+const PORT = 5001;
 
-app.listen(PORT, () =>
-  console.log(`server is running on port ${process.env.PORT}`)
-);
+app.listen(PORT, () => console.log(`server is running on port ${PORT}`));

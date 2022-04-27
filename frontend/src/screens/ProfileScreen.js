@@ -8,6 +8,8 @@ import {
   updateUserProfileAction,
 } from "../actions/userActions";
 import Message from "../components/Message";
+import Loader from "../components/Loader";
+import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
@@ -25,6 +27,8 @@ const ProfileScreen = () => {
 
   const { loading, error, user } = userDetails;
 
+  console.log("user", user);
+
   const userLogin = useSelector((state) => state.userLogin);
 
   const { userInfo } = userLogin;
@@ -38,6 +42,7 @@ const ProfileScreen = () => {
       navigate("/login");
     } else {
       if (!user || !user.name || success) {
+        dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetailsAction("profile"));
       } else {
         setName(user.name);
@@ -62,67 +67,75 @@ const ProfileScreen = () => {
     <div className="profileScreen">
       {message && <Message varient="danger">{message}</Message>}
       {success && <Message varient="success">Profile Updated</Message>}
-      <div className="userProfile">
-        <h3>USER PROFILE</h3>
-        <div className="userInfo">
-          <form className="form" onSubmit={submitHandler}>
-            <div className="form-control">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name"
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="email">Email Address</label>
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your Email Id"
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="text"
-                id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter your phone number"
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter Password"
-              />
-            </div>
-            <div className="form-control">
-              <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-                type="text"
-                id="confirmPassword"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Enter Confirm Password"
-              />
-            </div>
-
-            <button className="updateBtn" type="submit">
-              UPDATE
-            </button>
-          </form>
+      {loading ? (
+        <div>
+          <Loader />
         </div>
-      </div>
+      ) : error ? (
+        <h4>{error}</h4>
+      ) : (
+        <div className="userProfile">
+          <h3>USER PROFILE</h3>
+          <div className="userInfo">
+            <form className="form" onSubmit={submitHandler}>
+              <div className="form-control">
+                <label htmlFor="name">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your Email Id"
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="phone">Phone Number</label>
+                <input
+                  type="text"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Enter your phone number"
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter Password"
+                />
+              </div>
+              <div className="form-control">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  type="text"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Enter Confirm Password"
+                />
+              </div>
+
+              <button className="updateBtn" type="submit">
+                UPDATE
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
       <div className="userOrders">
         <h3>MY ORDERS</h3>
         <div className="myOrders">

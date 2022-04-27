@@ -62,15 +62,19 @@
   margin: 0 10px;
 }
 
-.placeOrderInfo .left .shipping .status,
-.placeOrderInfo .left .paymentMeth .status {
+ .status{
   background-color: #ff000038;
   padding: 1px;
   border: 1px solid #ff00003b;
 }
 
-.placeOrderInfo .left .shipping .status p,
-.placeOrderInfo .left .paymentMeth .status p {
+.success{
+  background-color: #9dde8638;
+  padding: 1px;
+  border: 1px solid #6ab5633b; 
+}
+
+.status p {
   margin-left: 20px;
 }
 

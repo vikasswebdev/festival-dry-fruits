@@ -125,8 +125,6 @@ export const getUserDetailsAction = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      console.log("userInfo", userInfo);
-
       const response = await fetch(`http://localhost:5001/api/users/${id}`, {
         method: "GET",
         headers: {
@@ -135,6 +133,11 @@ export const getUserDetailsAction = (id) => {
       });
 
       const resData = await response.json();
+
+      if (resData.message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+        return;
+      }
 
       dispatch({ type: USER_DETAILS_SUCCESS, payload: resData });
     } catch (error) {

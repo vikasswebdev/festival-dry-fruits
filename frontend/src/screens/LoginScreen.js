@@ -14,7 +14,6 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
 
   const location = useLocation();
-  console.log(location);
 
   const userLogin = useSelector((state) => state.userLogin);
 
@@ -22,11 +21,11 @@ const LoginScreen = () => {
 
   const redirect = location.search ? location.search.split("=")[1] : "/";
 
-  console.log("redirect", redirect);
+  console.log(location.search);
 
   useEffect(() => {
     if (userInfo) {
-      navigate(`/${redirect}`);
+      navigate(`${redirect}`);
     }
   }, [navigate, userInfo, redirect]);
 

@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import {
-  getUserDetailsAction,
-  updatedUser,
-  updateUserProfileAction,
-} from "../actions/userActions";
+import { getUserDetailsAction, updatedUser } from "../actions/userActions";
 import Loader from "../components/Loader";
 import { UPDATE_USER_RESET } from "../constants/userConstants";
 
