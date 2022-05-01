@@ -112,38 +112,39 @@ const ProductScreen = () => {
               <p>{product.description}</p>
             </div>
           </div>
-          <div className="priceCard">
-            <div className="price">
-              <p>Price:</p>
-              <p>${product.price}</p>
-            </div>
-            <hr style={{ color: "gray" }} />
-            <div className="status">
-              <p>Status:</p>
-              <p>{product.countInStock > 0 ? "In Stock" : "Out Of Stock"}</p>
-            </div>
-            <hr style={{ color: "gray" }} />
-            {product.countInStock > 0 && (
-              <div className="quantity">
-                <p>Quantity:</p>
-                <select value={qty} onChange={(e) => setQty(e.target.value)}>
-                  {[...Array(product.countInStock).keys()].map((x) => (
-                    <option key={x + 1} value={x + 1}>
-                      {x + 1}
-                    </option>
-                  ))}
-                </select>
+          <div className="priceContainer">
+            <div className="priceCard">
+              <div className="listItem">
+                <p>Price:</p>
+                <p>
+                  <strong>{product.price} &#8377;</strong>
+                </p>
               </div>
-            )}
-            <hr style={{ color: "gray" }} />
-            <div>
-              <button
-                className="addToCart"
-                onClick={addToCartHandler}
-                disabled={product.countInStock === 0}
-              >
-                Add to Cart
-              </button>
+              <div className="listItem">
+                <p>Status:</p>
+                <p> {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}</p>
+              </div>
+              {product.countInStock > 0 && (
+                <div className="listItem">
+                  <p>Quantity:</p>
+                  <select onChange={(e) => setQty(e.target.value)}>
+                    {[...Array(product.countInStock).keys()].map((x) => (
+                      <option key={x + 1} value={x + 1}>
+                        {x + 1}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+              <div className="listItem" style={{ justifyContent: "center" }}>
+                <button
+                  onClick={addToCartHandler}
+                  className="addToCart"
+                  disabled={product.countInStock === 0}
+                >
+                  Add to cart
+                </button>
+              </div>
             </div>
           </div>
         </div>

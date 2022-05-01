@@ -24,6 +24,10 @@
   flex-wrap: wrap;
 }
 
+.productInfo div{
+  flex: 1;
+}
+
 .productInfo .productImage {
   width: 500px;
   height: 500px;
@@ -41,38 +45,32 @@
   margin-right: 7vh;
 }
 
-.productInfo .priceCard {
-  border: 1px solid gray;
-  height: max-content;
-  width: 180px;
+.productInfo .priceContainer{
+  flex: .7;
 }
 
-.quantity select {
-  padding: 5px 10px;
-  border: 2px solid gray;
-}
-
-.priceCard div {
+.priceContainer .priceCard .listItem{
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  border-bottom: 1px solid gray;
   padding: 10px;
-}
-.priceCard div .addToCart {
-  background-color: #1b1b19;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 18px;
-  cursor: pointer;
-  position: relative;
-  left: 12px;
+  align-items: center;
 }
 
-.priceCard div .addToCart:active {
+.priceContainer .priceCard .listItem p {
+  flex: 1;
+}
+
+.priceContainer .priceCard .listItem .addToCart{
+  background-color: black;
+  color: white;
+  font-size: 16px;
+  padding: 10px 60px;
+  border: 1px solid black;
+}
+
+.priceContainer .priceCard .listItem .addToCart:active{
   background-color: white;
   color: black;
-  border: 1px solid black;
 }
 
 .reviewContainer {

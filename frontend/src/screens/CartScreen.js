@@ -99,10 +99,10 @@ const CartScreen = () => {
             ITEMS
           </h3>
           <p style={{ fontSize: 24 }}>
-            $
             {cartItems
               .reduce((acc, item) => acc + item.qty * item.price, 0)
-              .toFixed(2)}
+              .toFixed(2)}{" "}
+            &#8377;
           </p>
         </div>
 

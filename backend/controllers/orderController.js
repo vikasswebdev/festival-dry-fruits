@@ -1,5 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
+import Razorpay from "razorpay";
+import crypto from "crypto";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -115,4 +117,112 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 export const getOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find({}).populate("user", "id name");
   res.json(orders);
+});
+
+// @desc payment controller
+// @route GET /api/orders/payment
+// @access Private
+
+export const paymentController = asyncHandler(async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const instance = new Razorpay({
+      key_id: "rzp_test_DvRUfbzys6ZwsX",
+      key_secret: "AkpG1obYFH0bnHGLUjnh4VTC",
+    });
+
+    const order = await Order.findById(id).populate("user", "name email");
+
+    const options = {
+      amount: order.totalPrice,
+      currency: "INR",
+      receipt: order._id,
+    };
+
+    const myorder = await instance.orders.create(options);
+
+    if (!myorder) {
+      res.status(500).send("Some error occured");
+      return;
+    }
+    res.json(myorder);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// @desc    Verify payment
+// @route   POST /api/orders/verify
+// @access  Private
+
+export const verifyPayment = asyncHandler(async (req, res) => {
+  try {
+    // getting the details back from our font-end
+    const {
+      orderId,
+      orderCreationId,
+      razorpayPaymentId,
+      razorpayOrderId,
+      razorpaySignature,
+    } = req.body;
+
+    console.log(req.body);
+
+    const shasum = crypto.createHmac("sha256", "AkpG1obYFH0bnHGLUjnh4VTC");
+
+    shasum.update(`${orderCreationId}|${razorpayPaymentId}`);
+
+    const generatedSignature = shasum.digest("hex");
+
+    if (generatedSignature !== razorpaySignature) {
+      res.status(400).json({
+        message: "Payment failed",
+      });
+      return;
+    } else {
+      const instance = new Razorpay({
+        key_id: "rzp_test_DvRUfbzys6ZwsX",
+        key_secret: "AkpG1obYFH0bnHGLUjnh4VTC",
+      });
+
+      const order = await Order.findById(orderId).populate(
+        "user",
+        "name email"
+      );
+
+      // console.log("order", order);
+
+      const verify = await instance.orders.fetch(razorpayOrderId);
+
+      // console.log("verify", verify);
+
+      if (!verify) {
+        res.status(500).json({
+          message: "Some error occured",
+        });
+        return;
+      }
+
+      if (verify.status === "paid") {
+        order.isPaid = true;
+        order.paidAt = Date.now();
+        order.paymentResult = {
+          id: razorpayPaymentId,
+          status: verify.status,
+          update_time: verify.update_time,
+          email_address: verify.email_address,
+        };
+        const updatedOrder = await order.save();
+        res.json(updatedOrder);
+      } else {
+        res.status(400).json({
+          message: "Payment failed",
+        });
+        return;
+      }
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });

@@ -26,7 +26,7 @@ app.use("/api/products", productRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api/payment", paymentRoutes);
+// app.use("/api/payment", paymentRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

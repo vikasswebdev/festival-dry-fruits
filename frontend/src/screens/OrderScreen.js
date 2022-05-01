@@ -2,21 +2,37 @@ import React, { useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../css/paymentscreen.css";
 import { useDispatch, useSelector } from "react-redux";
-import { deliverOrderAction, getOrderDetails } from "../actions/orderActions";
+import {
+  deliverOrderAction,
+  getOrderDetails,
+  orderPayVerifyAction,
+} from "../actions/orderActions";
 import Loader from "../components/Loader";
-import { ORDER_DELIVER_RESET } from "../constants/orderConstants";
+import {
+  ORDER_DELIVER_RESET,
+  ORDER_PAY_RESET,
+} from "../constants/orderConstants";
 
 const OrderScreen = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userLogin = useSelector((state) => state.userLogin);
+
+  const { userInfo } = userLogin;
 
   const orderDetails = useSelector((state) => state.orderDetails);
 
   const { order, loading, error } = orderDetails;
 
   const orderDeliver = useSelector((state) => state.orderDeliver);
+
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
+
+  // console.log("userInfo", userInfo);
 
   if (!loading && order) {
     //   Calculate prices
@@ -28,12 +44,6 @@ const OrderScreen = () => {
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
     );
   }
-
-  // console.log("order", order);
-
-  const userLogin = useSelector((state) => state.userLogin);
-
-  const { userInfo } = userLogin;
 
   const loadScript = (src) => {
     return new Promise((resolve) => {
@@ -59,17 +69,16 @@ const OrderScreen = () => {
       return;
     }
 
-    const result = await fetch("http://localhost:5001/api/payment/orders", {
+    const result = await fetch("http://localhost:5001/api/orders/payment", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
       },
       body: JSON.stringify({ id: id }),
     });
 
     const resData = await result.json();
-
-    console.log("resData", resData);
 
     if (!resData) {
       alert("Server error. Are you online?");
@@ -84,22 +93,20 @@ const OrderScreen = () => {
       amount: amount.toString(),
       currency: currency,
       name: "Festival",
-      description: "Test Transaction",
+      description: "Test payment",
       image:
         "https://images.unsplash.com/photo-1600841867003-d904bd142d29?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
       order_id: order_id,
       handler: async function (response) {
         const data = {
+          orderId: id,
           orderCreationId: order_id,
           razorpayPaymentId: response.razorpay_payment_id,
           razorpayOrderId: response.razorpay_order_id,
           razorpaySignature: response.razorpay_signature,
         };
 
-        // const result = await axios.post("http://localhost:5000/payment/success", data);
-
-        // alert(result.data.msg);
-        console.log(data);
+        dispatch(orderPayVerifyAction(data));
       },
 
       prefill: {
@@ -111,40 +118,12 @@ const OrderScreen = () => {
         address: order.shippingAddress,
       },
       theme: {
-        color: "#61dafb",
+        color: "#e38b0a",
       },
     };
 
     const paymentObject = new window.Razorpay(option);
     paymentObject.open();
-
-    // if (response) {
-    //   const options = {
-    //     key: "rzp_test_DvRUfbzys6ZwsX",
-    //     amount: 1 * 100,
-    //     name: "Festival",
-    //     description: "celebrate everyday festival",
-    //     image:
-    //       "https://images.unsplash.com/photo-1600841867003-d904bd142d29?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80",
-    //     // order_id: `${order._id}`,
-    //     handler: function (response) {
-    //       console.log(response);
-    //       // dispatch(
-    //       //   updateOrderToPaid(order._id, response.razorpay_payment_id)
-    //       // );
-    //     },
-    //     prefill: {
-    //       name: userInfo.name,
-    //       email: userInfo.email,
-    //       contact: userInfo.phone,
-    //     },
-    //     notes: {
-    //       address: "Hello World",
-    //     },
-    //   };
-    //   const rzp = new window.Razorpay(options);
-    //   rzp.open();
-    // }
   };
 
   useEffect(() => {
@@ -152,11 +131,12 @@ const OrderScreen = () => {
       navigate("/login");
     }
 
-    if (!order || successDeliver || order._id !== id) {
+    if (!order || successDeliver || successPay || order._id !== id) {
+      dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(id));
     }
-  }, [dispatch, id, order, successDeliver, userInfo]);
+  }, [dispatch, id, order, successDeliver, successPay, userInfo]);
 
   const deliverHandler = () => {
     dispatch(deliverOrderAction(order));

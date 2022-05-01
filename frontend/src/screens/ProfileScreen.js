@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "../css/profilescreen.css";
+import "../css/productlistscreen.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -10,6 +11,7 @@ import {
 import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
+import { listMyOrdersAction } from "../actions/orderActions";
 
 const ProfileScreen = () => {
   const [name, setName] = useState("");
@@ -23,19 +25,19 @@ const ProfileScreen = () => {
 
   const navigate = useNavigate();
 
-  const userDetails = useSelector((state) => state.userDetails);
-
-  const { loading, error, user } = userDetails;
-
-  console.log("user", user);
-
   const userLogin = useSelector((state) => state.userLogin);
 
   const { userInfo } = userLogin;
 
-  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+  const userDetails = useSelector((state) => state.userDetails);
+  const { loading, error, user } = userDetails;
 
+  const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
   const { success } = userUpdateProfile;
+
+  const listMyOrder = useSelector((state) => state.listMyOrder);
+
+  const { orders, loading: ordersLoading, error: ordersError } = listMyOrder;
 
   useEffect(() => {
     if (!userInfo) {
@@ -44,6 +46,7 @@ const ProfileScreen = () => {
       if (!user || !user.name || success) {
         dispatch({ type: USER_UPDATE_PROFILE_RESET });
         dispatch(getUserDetailsAction("profile"));
+        dispatch(listMyOrdersAction());
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -68,9 +71,7 @@ const ProfileScreen = () => {
       {message && <Message varient="danger">{message}</Message>}
       {success && <Message varient="success">Profile Updated</Message>}
       {loading ? (
-        <div>
-          <Loader />
-        </div>
+        <Loader />
       ) : error ? (
         <h4>{error}</h4>
       ) : (
@@ -136,52 +137,65 @@ const ProfileScreen = () => {
           </div>
         </div>
       )}
+
       <div className="userOrders">
         <h3>MY ORDERS</h3>
-        <div className="myOrders">
-          <div className="row">
-            <div className="rowItem">
-              <p>ID</p>
-            </div>
-            <div className="rowItem">
-              <p>DATE</p>
-            </div>
-            <div className="rowItem">
-              <p>TOTAL</p>
-            </div>
-            <div className="rowItem">
-              <p>PAID</p>
-            </div>
-            <div className="rowItem">
-              <p>DELIVERED</p>
-            </div>
-            <div className="rowItem">
-              <p></p>
-            </div>
-          </div>
-          <div className="tabelBody">
-            <div className="row">
-              <div className="rowItem">
-                <p>#345353</p>
-              </div>
-              <div className="rowItem">
-                <p>12-4-2021</p>
-              </div>
-              <div className="rowItem">
-                <p>$2522</p>
-              </div>
-              <div className="rowItem">
-                <p>yes</p>
-              </div>
-              <div className="rowItem">
-                <p>Pending</p>
-              </div>
-              <div className="rowItem">
-                <button>DETAILS</button>
-              </div>
-            </div>
-          </div>
-        </div>
+        {ordersLoading ? (
+          <Loader />
+        ) : ordersError ? (
+          <p>{ordersError}</p>
+        ) : (
+          <table
+            className="table"
+            style={{ width: "100%", margin: "0px 30px" }}
+            border={1}
+          >
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>DATE</th>
+                <th>TOTAL</th>
+                <th>PAID</th>
+                <th>DELIVERED</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders &&
+                orders.map((order, index) => (
+                  <tr key={order._id}>
+                    <td>{order._id}</td>
+                    <td>{order.createdAt.substring(0, 10)}</td>
+                    <td>{order.totalPrice}</td>
+                    <td>
+                      {order.isPaid ? (
+                        order.paidAt
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      {" "}
+                      {order.isDelivered ? (
+                        order.deliveredAt
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      <Link to={`/order/${order._id}`}>Details</Link>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );
