@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
+import Product from "../models/productModel.js";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -35,7 +36,28 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     });
 
     const createdOrder = await order.save();
-    res.status(201).json(createdOrder);
+
+    const products = await Product.find({
+      _id: {
+        $in: orderItems.map((item) => item.product),
+      },
+    });
+
+    products.forEach(async (product) => {
+      const p = await Product.findByIdAndUpdate(product._id, {
+        $inc: {
+          countInStock: -orderItems.filter(
+            (item) => item.product.toString() === product._id.toString()
+          )[0].qty,
+        },
+      })
+        .then(() => {
+          res.status(201).json(createdOrder);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
   }
 });
 

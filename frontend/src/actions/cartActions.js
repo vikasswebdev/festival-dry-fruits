@@ -10,8 +10,6 @@ export const addToCart = (id, qty) => {
     const response = await fetch(`http://localhost:5001/api/products/${id}`);
     const resData = await response.json();
 
-    // console.log("resData", resData);
-
     const item = {
       product: resData._id,
       name: resData.name,
