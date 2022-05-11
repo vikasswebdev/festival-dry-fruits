@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { userLogoutAction } from "../actions/userActions";
 import { useDispatch } from "react-redux";
+import SearchBox from "./SearchBox";
 const Header = () => {
   const toggleRef = useRef(null);
   const dragRef = useRef(null);
@@ -60,6 +61,7 @@ const Header = () => {
         </ul>
       </nav>
       <div className="icons">
+        <SearchBox />
         <Link to="/cart">
           <i title="Cart" className="fas fa-shopping-cart"></i>
           <span className="cartTag">1</span>

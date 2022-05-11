@@ -231,3 +231,13 @@ footer h1 {
   align-items: center;
   background-color: rgba(0,0,0,0.5);
 }
+
+.searchForm{
+  position: relative;
+}
+.searchForm input{
+  padding: 5px 27px;
+  border: 1px solid gray;
+  outline: none;
+  border-radius: 10px;
+}

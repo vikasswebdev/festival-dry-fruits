@@ -23,11 +23,13 @@ import {
 } from "../constants/productConstants";
 import { userLogoutAction } from "./userActions";
 
-export const productsList = () => {
+export const productsList = (keyword = "", pageNumber = "") => {
   return async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
-      const response = await fetch("http://localhost:5001/api/products");
+      const response = await fetch(
+        `http://localhost:5001/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+      );
       const data = await response.json();
       console.log(data);
       dispatch({

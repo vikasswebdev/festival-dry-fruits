@@ -5,16 +5,22 @@ import "../css/homescreen.css";
 import { useSelector, useDispatch } from "react-redux";
 import { productsList } from "../actions/productActions";
 import Loader from "../components/Loader";
+import { useParams } from "react-router-dom";
+import Paginate from "../components/Paginate";
 
 const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, pages, page } = productList;
 
   const dispatch = useDispatch();
 
+  const { keyword, pageNumber } = useParams();
+
+  const mypageNumber = pageNumber || 1;
+
   useEffect(() => {
-    dispatch(productsList());
-  }, [dispatch]);
+    dispatch(productsList(keyword, mypageNumber));
+  }, [dispatch, keyword, mypageNumber]);
 
   return (
     <>
@@ -42,6 +48,11 @@ const HomeScreen = () => {
                 <Product key={index} id={index} product={product} />
               ))}
             </div>
+            <Paginate
+              pages={pages}
+              page={page}
+              keyword={keyword ? keyword : ""}
+            />
           </>
         )}
       </div>
