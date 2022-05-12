@@ -3,6 +3,7 @@ import Order from "../models/orderModel.js";
 import Razorpay from "razorpay";
 import crypto from "crypto";
 import Product from "../models/productModel.js";
+import nodeMailer from "nodemailer";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -24,6 +25,63 @@ export const addOrderItems = asyncHandler(async (req, res) => {
     throw new Error("No Order Items");
     return;
   } else {
+    let mailTransport = nodeMailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "festivaldryfruits@gmail.com",
+        pass: "kherad246810",
+      },
+    });
+
+    let mailOptions = {
+      from: "festivaldryfruits@gmail.com",
+      to: "vikaspatel2865@gmail.com",
+
+      subject: "Order Placed",
+      text: "Order Placed",
+      html: `<h1>Order Placed</h1>
+      <p>
+        You have placed an order with the following details:
+      </p>
+      <p>
+        Order Items: ${orderItems}
+      </p>
+      <p>
+        Shipping Address: ${shippingAddress}
+      </p>
+      <p>
+        Payment Method: ${paymentMethod}
+      </p>
+      <p>
+        Items Price: ${itemsPrice}
+      </p>
+      <p>
+        Tax Price: ${taxPrice}
+      </p>  
+      <p>
+        Shipping Price: ${shippingPrice}
+      </p>
+      <p>
+        Total Price: ${totalPrice}
+      </p>
+      <p>
+
+        Thank You
+      </p>
+      <p>
+        Team Festivel Dry Fruits
+      </p>
+      `,
+    };
+
+    mailTransport.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+      }
+    });
+
     const order = new Order({
       orderItems,
       user: req.user._id,

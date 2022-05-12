@@ -7,6 +7,7 @@ import { productsList } from "../actions/productActions";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
+import Carousel, { CarouselItem } from "../components/carousel/Carousel";
 
 const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
@@ -48,11 +49,13 @@ const HomeScreen = () => {
                 <Product key={index} id={index} product={product} />
               ))}
             </div>
-            <Paginate
-              pages={pages}
-              page={page}
-              keyword={keyword ? keyword : ""}
-            />
+            {pages > 1 && (
+              <Paginate
+                pages={pages}
+                page={page}
+                keyword={keyword ? keyword : ""}
+              />
+            )}
           </>
         )}
       </div>

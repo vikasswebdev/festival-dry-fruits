@@ -59,7 +59,7 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
         </Routes>
       </main>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

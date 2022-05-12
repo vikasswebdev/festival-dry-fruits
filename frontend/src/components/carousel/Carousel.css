@@ -1,0 +1,50 @@
+.carousel{
+    overflow: hidden;
+}
+
+.inner{
+  white-space: nowrap;
+    transition: 0.5s;
+}
+
+.carousel-item{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: "60%";
+  background-color: rgb(218, 218, 218);
+  color: white;
+
+}
+
+.controls{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.controls button{
+  background-color: rgb(218, 218, 218);
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 3px;
+  margin: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.controls .active{
+  background-color: rgb(162, 162, 162);
+}
+
+.arrows{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  
+}

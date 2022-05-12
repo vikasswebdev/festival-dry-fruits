@@ -1,6 +1,7 @@
 .cartScreen {
   display: flex;
   padding: 10px 70px;
+  min-height: 75vh;
 }
 
 .cartProducts {

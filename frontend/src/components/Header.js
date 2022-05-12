@@ -56,7 +56,7 @@ const Header = () => {
             <Link to="/category">Category</Link>
           </li>
           <li>
-            <Link to="/blogs">Blog</Link>
+            <Link to="/blogs">About</Link>
           </li>
         </ul>
       </nav>
