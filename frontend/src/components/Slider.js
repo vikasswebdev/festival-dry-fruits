@@ -24,19 +24,16 @@ const SliderCom = () => {
     <Carousel>
       {products.map((product, index) => (
         <CarouselItem key={product._id}>
-          <Link to={`/product/${product._id}`}>
-            <div
-              style={{
-                borderRadius: "50%",
-                overflow: "hidden",
-              }}
-            >
-              <img
-                style={{ width: "100%", height: "90%" }}
-                src={`${product.image}`}
-                alt=""
-              />
-            </div>
+          <Link
+            style={{ width: "100%", height: 550 }}
+            to={`/product/${product._id}`}
+          >
+            <img
+              style={{ width: "100%", height: "100%" }}
+              src={`${product.image}`}
+              alt=""
+            />
+            <h3>{product.name}</h3>
           </Link>
         </CarouselItem>
       ))}

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../css/userslist.css";
+import "../css/productlistscreen.css";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, listUsersAction } from "../actions/userActions";
 import Loader from "../components/Loader";
@@ -34,67 +34,58 @@ const UserListScreen = () => {
   };
 
   return (
-    <div className="container">
-      <h1>USERS</h1>
-      <div className="tabel">
-        <div className="tabelHead tabelItem">
-          <p>ID</p>
-          <p>NAME</p>
-          <p>EMAIL</p>
-          <p>PHONE</p>
-          <p>ADMIN</p>
-          <p></p>
-        </div>
-        <div className="tabelBody">
-          {loading && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Loader />
-            </div>
-          )}
-          {error && <Message varient="danger">{error}</Message>}
-          {users &&
-            users.map((user) => (
-              <div className="tabelItem" key={user._id}>
-                <p>{user._id}</p>
-                <p>{user.name}</p>
-                <p>
-                  <a href={`mailto:${user.email}`}>{user.email}</a>
-                </p>
-                <p>{user.number}</p>
-                <p>
-                  {user.isAdmin ? (
-                    <i
-                      style={{ color: "green" }}
-                      className="fa-solid fa-check"
-                    ></i>
-                  ) : (
-                    <i
-                      style={{ color: "red" }}
-                      className="fa-solid fa-xmark"
-                    ></i>
-                  )}
-                </p>
-                <p>
-                  <Link to={`/admin/user/${user._id}/edit`}>
-                    <i className="fa-solid fa-pen-to-square"></i>
-                  </Link>
-
-                  <i
-                    style={{ marginLeft: 10 }}
-                    onClick={() => deleteUserHandler(user._id)}
-                    className="fa-solid fa-trash-can"
-                  ></i>
-                </p>
-              </div>
-            ))}
-        </div>
-      </div>
+    <div className="productsContainer">
+      {loading ? (
+        <Loader />
+      ) : error ? (
+        <p>{error}</p>
+      ) : (
+        <>
+          <div className="topContainer">
+            <h1>USERS</h1>
+          </div>
+          <table className="table" border={1}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>PHONE</th>
+                <th>ADMIN</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {users &&
+                users.map((user) => (
+                  <tr key={user._id}>
+                    <td>{user._id}</td>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phone}</td>
+                    <td>
+                      {user.isAdmin ? (
+                        <i className="fas fa-check"></i>
+                      ) : (
+                        <i className="fas fa-times"></i>
+                      )}
+                    </td>
+                    <td>
+                      <Link to={`/admin/user/${user._id}/edit`}>
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </Link>
+                      <i
+                        style={{ marginLeft: 10, cursor: "pointer" }}
+                        onClick={() => deleteUserHandler(user._id)}
+                        className="fa-solid fa-trash-can"
+                      ></i>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </>
+      )}
     </div>
   );
 };

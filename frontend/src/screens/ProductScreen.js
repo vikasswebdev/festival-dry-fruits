@@ -74,6 +74,10 @@ const ProductScreen = () => {
     navigate(`/cart/${id}?qty=${qty}`);
   };
 
+  const createMarkup = (html) => {
+    return { __html: html };
+  };
+
   return (
     <>
       {error && <div className="error">{error}</div>}
@@ -105,11 +109,14 @@ const ProductScreen = () => {
             </div>
             <hr />
             <div className="price">
-              <h3>Price: ${product.price}</h3>
+              <h3>Price: {product.price} &#8377;</h3>
             </div>
             <hr />
             <div className="description">
-              <p>{product.description}</p>
+              {/* <p>{product.description}</p> */}
+              <div
+                dangerouslySetInnerHTML={createMarkup(product.description)}
+              />
             </div>
           </div>
           <div className="priceContainer">

@@ -13,7 +13,7 @@ const PlaceOrderScreen = () => {
 
   const cart = useSelector((state) => state.cart);
 
-  console.log("cart", cart);
+  console.log("cart.paymentMethod", cart.paymentMethod);
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {

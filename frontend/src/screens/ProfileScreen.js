@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../css/profilescreen.css";
 import "../css/productlistscreen.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import {
   getUserDetailsAction,
   updateUserProfileAction,
+  userLogoutAction,
 } from "../actions/userActions";
 import Message from "../components/Message";
 import Loader from "../components/Loader";
@@ -24,6 +25,11 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    dispatch(userLogoutAction());
+  };
 
   const userLogin = useSelector((state) => state.userLogin);
 
@@ -132,6 +138,13 @@ const ProfileScreen = () => {
 
               <button className="updateBtn" type="submit">
                 UPDATE
+              </button>
+              <button
+                className="updateBtn logOut"
+                onClick={logoutHandler}
+                type="button"
+              >
+                LOG OUT
               </button>
             </form>
           </div>

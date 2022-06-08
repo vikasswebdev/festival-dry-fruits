@@ -154,7 +154,7 @@ export const updateOrderToPaid = asyncHandler(async (req, res) => {
       email_address: req.body.email_address,
     };
 
-    const updatedOrder = await Order.save();
+    const updatedOrder = await order.save();
 
     res.json(updatedOrder);
   } else {
@@ -182,6 +182,24 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update order to delivered
+// @route   GET /api/orders/:id/deliver
+// @access  Private/Admin
+
+export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.status = req.body.status;
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found!");
+  }
+});
+
 // @desc    Get logged in user orders
 // @route   GET /api/orders/myorders
 // @access  Private
@@ -195,8 +213,20 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 // @route   GET /api/orders
 // @access  Private/Admin
 export const getOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({}).populate("user", "id name");
-  res.json(orders);
+  const pageSize = 8;
+
+  const page = Number(req.query.pageNumber) || 1;
+
+  const count = await Order.countDocuments();
+
+  const orders = await Order.find({})
+    .sort([["createdAt", "descending"]])
+    .populate("user", "id name")
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({ orders, page, pages: Math.ceil(count / pageSize) });
+  // res.json(orders);
 });
 
 // @desc payment controller

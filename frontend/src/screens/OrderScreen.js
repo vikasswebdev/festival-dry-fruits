@@ -1,22 +1,26 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../css/paymentscreen.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deliverOrderAction,
   getOrderDetails,
+  orderPayStatusUpdateAction,
   orderPayVerifyAction,
+  updateOrderStatusAction,
 } from "../actions/orderActions";
 import Loader from "../components/Loader";
 import {
   ORDER_DELIVER_RESET,
   ORDER_PAY_RESET,
+  ORDER_DETAILS_RESET,
 } from "../constants/orderConstants";
 
 const OrderScreen = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const userLogin = useSelector((state) => state.userLogin);
 
   const { userInfo } = userLogin;
@@ -25,6 +29,8 @@ const OrderScreen = () => {
 
   const { order, loading, error } = orderDetails;
 
+  const [myStatus, setMyStatus] = useState("");
+
   const orderDeliver = useSelector((state) => state.orderDeliver);
 
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
@@ -32,7 +38,15 @@ const OrderScreen = () => {
   const orderPay = useSelector((state) => state.orderPay);
   const { loading: loadingPay, success: successPay } = orderPay;
 
-  // console.log("userInfo", userInfo);
+  const updateOrderStatus = useSelector((state) => state.updateOrderStatus);
+
+  const {
+    loading: loadingUpdate,
+    success: successUpdate,
+    error: errorUpdate,
+  } = updateOrderStatus;
+
+  console.log("success updtae", successUpdate);
 
   if (!loading && order) {
     //   Calculate prices
@@ -136,19 +150,41 @@ const OrderScreen = () => {
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(id));
     }
-  }, [dispatch, id, order, successDeliver, successPay, userInfo]);
+
+    if (order) {
+      setMyStatus(order.status);
+    }
+  }, [dispatch, id, order, successDeliver, successPay, navigate, userInfo]);
+
+  const caseOnDeliveryPaid = () => {
+    dispatch(orderPayStatusUpdateAction(order));
+  };
 
   const deliverHandler = () => {
     dispatch(deliverOrderAction(order));
   };
 
+  const statuses = [
+    "Not processed",
+    "Processing",
+    "Shipped",
+    "Delivered",
+    "Cancelled",
+  ];
+
+  const statusHandler = async (e) => {
+    const status = e.target.value;
+    await dispatch(updateOrderStatusAction(order, status));
+    dispatch({ type: ORDER_DETAILS_RESET });
+  };
+
   return (
     <div className="placeOrderScreen">
-      {loading ? (
+      {loading || loadingDeliver || loadingPay || loadingUpdate ? (
         <div>
-          <Loader />{" "}
+          <Loader />
         </div>
-      ) : error ? (
+      ) : error || errorUpdate ? (
         <div>{error}</div>
       ) : (
         order && (
@@ -237,24 +273,55 @@ const OrderScreen = () => {
                   <p>Total</p>
                   <p>${order.totalPrice}</p>
                 </div>
-                {!order.isPaid && (
+                {!order.isPaid && order.paymentMethod !== "cod" && (
                   <div className="ordSumItem">
                     <button className="orderSumBtn" onClick={displayRozerPay}>
                       Pay
                     </button>
                   </div>
                 )}
+
+                {userInfo &&
+                  userInfo.isAdmin &&
+                  !order.isDelivered &&
+                  !order.isPaid &&
+                  order.paymentMethod === "cod" && (
+                    <div className="ordSumItem">
+                      <button
+                        className="orderSumBtn"
+                        onClick={caseOnDeliveryPaid}
+                      >
+                        customer paid
+                      </button>
+                    </div>
+                  )}
+
                 {userInfo &&
                   userInfo.isAdmin &&
                   order.isPaid &&
                   !order.isDelivered && (
                     <div className="ordSumItem">
                       <button className="orderSumBtn" onClick={deliverHandler}>
-                        {" "}
                         Mark As Delivered
                       </button>
                     </div>
                   )}
+
+                {userInfo && userInfo.isAdmin && (
+                  <div className="ordSumItem">
+                    <select
+                      value={myStatus}
+                      style={{ padding: 10, margin: 10, fontWeight: "bold" }}
+                      onChange={statusHandler}
+                    >
+                      {statuses.map((item) => (
+                        <option key={item} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
             </div>
           </div>

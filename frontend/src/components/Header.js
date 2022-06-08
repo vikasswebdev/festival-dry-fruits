@@ -1,40 +1,18 @@
-import React, { useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { userLogoutAction } from "../actions/userActions";
-import { useDispatch } from "react-redux";
+import React, { useRef } from "react";
+import { Link } from "react-router-dom";
 import SearchBox from "./SearchBox";
+import { useDispatch, useSelector } from "react-redux";
+
 const Header = () => {
   const toggleRef = useRef(null);
-  const dragRef = useRef(null);
-  const dragRefAdmin = useRef(null);
 
-  const location = useLocation();
+  const userLogin = useSelector((state) => state.userLogin);
 
-  const dispatch = useDispatch();
+  const { userInfo } = userLogin;
 
-  const toggleDrag = () => {
-    dragRef.current.classList.toggle("drag");
-    dragRefAdmin.current.classList.remove("drag");
-  };
-
-  const toggleDragAdmin = () => {
-    dragRefAdmin.current.classList.toggle("drag");
-    dragRef.current.classList.remove("drag");
-  };
-
-  const toggleDrawer = () => {
+  function toggleDrawer() {
     toggleRef.current.classList.toggle("active");
-  };
-
-  useEffect(() => {
-    dragRef.current.classList.remove("drag");
-    dragRefAdmin.current.classList.remove("drag");
-  }, [location]);
-
-  const logoutHandler = (e) => {
-    e.preventDefault();
-    dispatch(userLogoutAction());
-  };
+  }
 
   return (
     <header className="header">
@@ -44,65 +22,27 @@ const Header = () => {
           <span>dry-fruits & spices</span>
         </Link>
       </div>
-      <nav className="navigation">
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/products">Products</Link>
-          </li>
-          <li>
-            <Link to="/category">Category</Link>
-          </li>
-          <li>
-            <Link to="/blogs">About</Link>
-          </li>
-        </ul>
-      </nav>
+      <SearchBox />
       <div className="icons">
-        <SearchBox />
         <Link to="/cart">
-          <i title="Cart" className="fas fa-shopping-cart"></i>
-          <span className="cartTag">1</span>
+          <i title="Cart" className="fas fa-shopping-cart icon"></i>
         </Link>
-        <i
-          style={{ color: "white", margin: "0px 10px", cursor: "pointer" }}
-          onClick={toggleDrag}
-          title="User"
-          className="fas fa-user"
-        ></i>
-        <div className="dargDown" ref={dragRef}>
-          <ul>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <p onClick={logoutHandler}>Logout</p>
-            </li>
-          </ul>
-        </div>
-
-        <i
-          title="Admin"
-          style={{ color: "white", margin: "0px 10px", cursor: "pointer" }}
-          className="fas fa-user-cog"
-          onClick={toggleDragAdmin}
-        ></i>
-        <div className="dargDown" style={{ height: 92 }} ref={dragRefAdmin}>
-          <ul>
-            <li>
-              <Link to="/admin/userlist">Users</Link>
-            </li>
-            <li>
-              <Link to="/admin/productlist">Products</Link>
-            </li>
-            <li>
-              <Link to="/admin/orderlist">Orders</Link>
-            </li>
-          </ul>
-        </div>
+        {userInfo ? (
+          <Link to="/profile">
+            <i title="User" className="fas fa-user icon"></i>
+          </Link>
+        ) : (
+          <Link to="/login">
+            <i title="User" className="fas fa-user icon"></i>
+          </Link>
+        )}
+        {userInfo && userInfo.isAdmin && (
+          <Link to="/admin">
+            <i title="admin" className="fas fa-user-cog icon"></i>
+          </Link>
+        )}
       </div>
+
       <i onClick={toggleDrawer} className="fas fa-bars barIcon"></i>
       <div className="drawer active" ref={toggleRef}>
         <div className="drawerHeader">

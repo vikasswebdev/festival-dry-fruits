@@ -18,10 +18,21 @@ export const getProducts = asyncHandler(async (req, res) => {
     : {};
 
   const count = await Product.countDocuments({ ...keyword });
+
   const products = await Product.find({ ...keyword })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
+
   res.json({ products, page, pages: Math.ceil(count / pageSize) });
+});
+
+// @desc    Fetch all products for dashboard
+// @route   GET /api/admin/productlist
+// @access  Private
+
+export const getProductsForDashboard = asyncHandler(async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
 });
 
 // @desc    Fetch single product
@@ -44,6 +55,7 @@ export const getProductById = asyncHandler(async (req, res) => {
 export const createProduct = asyncHandler(async (req, res) => {
   const product = new Product({
     name: "Sample name",
+    slug: "sample-slug",
     price: 0,
     user: req.user._id,
     image: "/images/sample.jpg",
@@ -77,13 +89,22 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { name, price, description, image, brand, category, countInStock } =
-    req.body;
+  const {
+    name,
+    slug,
+    price,
+    description,
+    image,
+    brand,
+    category,
+    countInStock,
+  } = req.body;
 
   const product = await Product.findById(req.params.id);
 
   if (product) {
     product.name = name;
+    product.slug = slug;
     product.price = price;
     product.description = description;
     product.image = image;

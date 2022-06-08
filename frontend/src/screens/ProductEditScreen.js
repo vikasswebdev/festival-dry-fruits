@@ -11,6 +11,9 @@ import {
   PRODUCT_UPDATE_SUCCESS,
 } from "../constants/productConstants";
 
+import SunEditor from "suneditor-react";
+import "suneditor/dist/css/suneditor.min.css";
+
 const ProductEditScreen = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -19,6 +22,7 @@ const ProductEditScreen = () => {
   const [image, setImage] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [description, setDescription] = useState("");
+  const [slug, setSlug] = useState("");
 
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -28,6 +32,7 @@ const ProductEditScreen = () => {
   const { loading, error, product } = productDetails;
 
   const productUpdate = useSelector((state) => state.productUpdate);
+
   const {
     loading: loadingUpdate,
     error: errorUpdate,
@@ -43,6 +48,7 @@ const ProductEditScreen = () => {
         dispatch(productListDetails(id));
       } else {
         setName(product.name);
+        setSlug(product.slug);
         setPrice(product.price);
         setCategory(product.category);
         setBrand(product.brand);
@@ -55,7 +61,6 @@ const ProductEditScreen = () => {
 
   const uploadHandler = async (e) => {
     const file = e.target.files;
-    // console.log(file);
 
     const formData = new FormData();
     formData.append("image", file[0]);
@@ -75,20 +80,11 @@ const ProductEditScreen = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const product = {
-    //   name,
-    //   price,
-    //   category,
-    //   brand,
-    //   image,
-    //   countInStock,
-    //   description,
-    // };
-
     dispatch(
       productUpdateAction({
         _id: id,
         name,
+        slug,
         price,
         category,
         brand,
@@ -99,6 +95,12 @@ const ProductEditScreen = () => {
     );
 
     // console.log(product);
+  };
+
+  const generateSlug = (e) => {
+    e.preventDefault();
+    const slug = name.replace(/\s+/g, "-").toLowerCase();
+    setSlug(slug);
   };
 
   return (
@@ -115,6 +117,19 @@ const ProductEditScreen = () => {
               placeholder="Enter Product Name"
               onChange={(e) => setName(e.target.value)}
             />
+          </div>
+          <div className="form-control">
+            <label htmlFor="slug">Slug</label>
+            <input type="text" id="slug" value={slug} required readOnly />
+            <button
+              style={{
+                marginTop: "10px",
+                width: "30%",
+              }}
+              onClick={generateSlug}
+            >
+              Generate Slug
+            </button>
           </div>
           <div className="form-control">
             <label htmlFor="price">Price</label>
@@ -184,7 +199,7 @@ const ProductEditScreen = () => {
               <option value="5">Shirts</option>
             </select>
           </div>
-          <div className="form-control">
+          {/* <div className="form-control">
             <label htmlFor="description">Description</label>
             <textarea
               name="description"
@@ -193,6 +208,47 @@ const ProductEditScreen = () => {
               placeholder="Enter Product Description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+            />
+          </div> */}
+          <div className="form-control">
+            <label htmlFor="description">Description</label>
+            <SunEditor
+              height="300px"
+              width="100%"
+              name="myeditor"
+              placeholder="Type somthing here..."
+              defaultValue={`<p>Hello world!</p>`}
+              onChange={(e) => setDescription(e)}
+              // onScroll={(e) => console.log(e)}
+              // onClick={onClickEvent}
+              // onMouseDown={onMouseDownEvent}
+              // onKeyUp={onKeyUpEvent}
+              // onFocus={onFocusEvent}
+              setContents={description}
+              setOptions={{
+                buttonList: [
+                  ["undo", "redo"],
+                  ["font", "fontSize", "formatBlock"],
+                  ["paragraphStyle", "blockquote"],
+                  [
+                    "bold",
+                    "underline",
+                    "italic",
+                    "strike",
+                    "subscript",
+                    "superscript",
+                  ],
+                  ["fontColor", "hiliteColor", "textStyle"],
+                  ["removeFormat"],
+                  ["outdent", "indent"],
+                  ["align", "horizontalRule", "list", "lineHeight"],
+                  ["table", "link", "image", "video", "audio"],
+                  ["imageGallery"],
+                  ["fullScreen", "showBlocks", "codeView"],
+                  ["preview", "print"],
+                  ["save", "template"],
+                ],
+              }}
             />
           </div>
           <button type="submit" className="btn">

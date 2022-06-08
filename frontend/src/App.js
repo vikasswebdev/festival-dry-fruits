@@ -1,7 +1,7 @@
 import "./App.css";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import HomeScreen from "./screens/HomeScreen";
 import ProductScreen from "./screens/ProductScreen";
 import CategoryScreen from "./screens/CategoryScreen";
@@ -20,13 +20,23 @@ import UserEditScreen from "./screens/UserEditScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ProductEditScreen from "./screens/ProductEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import AdminScreen from "./screens/admin/AdminScreen";
+import { useEffect } from "react";
+import ScrollToTop from "./components/ScrollToTop";
+import Page404 from "./screens/Page404";
 
 function App() {
+  const location = useLocation();
+
+  const myLocation = location.pathname.includes("/admin");
+
   return (
     <>
+      {myLocation ? null : <ScrollToTop />}
       <Header />
       <main>
         <Routes>
+          <Route path="admin/*" element={<AdminScreen />} />
           <Route path="/order/:id" element={<OrderScreen />} />
           <Route path="/shipping" element={<ShippingScreen />} />
           <Route path="/register" element={<RegisterScreen />} />
@@ -40,14 +50,14 @@ function App() {
           <Route path="/cart" element={<CartScreen />} />
           <Route path="/category" element={<CategoryScreen />} />
           <Route path="/blogs" element={<LatestScreen />} />
-          <Route
+          {/* <Route
             path="/admin/product/:id/edit"
             element={<ProductEditScreen />}
-          />
-          <Route path="/admin/user/:id/edit" element={<UserEditScreen />} />
-          <Route path="/admin/productlist" element={<ProductListScreen />} />
-          <Route path="/admin/userlist" element={<UserListScreen />} />
-          <Route path="/admin/orderlist" element={<OrderListScreen />} />
+          /> */}
+          {/* <Route path="/admin/user/:id/edit" element={<UserEditScreen />} /> */}
+          {/* <Route path="/admin/productlist" element={<ProductListScreen />} /> */}
+          {/* <Route path="/admin/userlist" element={<UserListScreen />} /> */}
+          {/* <Route path="/admin/orderlist" element={<OrderListScreen />} /> */}
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/products" element={<ProductsScreen />} />
           <Route path="/search/:keyword" element={<HomeScreen />} />
@@ -57,9 +67,10 @@ function App() {
           />
           <Route path="/page/:pageNumber" element={<HomeScreen />} />
           <Route path="/" element={<HomeScreen />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
       </main>
-      <Footer />
+      {myLocation ? null : <Footer />}
     </>
   );
 }

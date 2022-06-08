@@ -145,7 +145,7 @@
   font-size: 16px;
 }
 
-.orderSummary .ordSumItem .orderSumBtn:focus {
+.orderSummary .ordSumItem .orderSumBtn:active {
   background-color: white;
   color: black;
   border: 1px solid black;

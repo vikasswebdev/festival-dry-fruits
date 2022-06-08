@@ -7,11 +7,12 @@ import { productsList } from "../actions/productActions";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
-import Carousel, { CarouselItem } from "../components/carousel/Carousel";
 
 const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, pages, page } = productList;
+
+  console.log("productList", productList);
 
   const dispatch = useDispatch();
 
@@ -49,6 +50,7 @@ const HomeScreen = () => {
                 <Product key={index} id={index} product={product} />
               ))}
             </div>
+
             {pages > 1 && (
               <Paginate
                 pages={pages}

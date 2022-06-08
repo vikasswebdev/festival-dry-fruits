@@ -8,17 +8,22 @@ import {
 } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { PRODUCT_CREATE_RESET } from "../constants/productConstants";
+import Paginate from "../components/Paginate";
 
 const ProductListScreen = () => {
   const productList = useSelector((state) => state.productList);
-  const { loading, error, products } = productList;
+  const { loading, error, products, page, pages } = productList;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const productDelete = useSelector((state) => state.productDelete);
+
+  const { pageNumber } = useParams();
+
+  const mypageNumber = pageNumber || 1;
 
   const {
     loading: loadingDelete,
@@ -47,9 +52,17 @@ const ProductListScreen = () => {
     if (successCreate) {
       navigate(`/admin/product/${createdProduct._id}/edit`);
     } else {
-      dispatch(productsList());
+      dispatch(productsList("", mypageNumber));
     }
-  }, [dispatch, userInfo, successCreate, successDelete, createdProduct]);
+  }, [
+    dispatch,
+    userInfo,
+    successCreate,
+    successDelete,
+    createdProduct,
+    navigate,
+    mypageNumber,
+  ]);
 
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure")) {
@@ -63,7 +76,7 @@ const ProductListScreen = () => {
 
   return (
     <div className="productsContainer">
-      <div className="topContainer">
+      <div className="topContainer" style={{ justifyContent: "space-between" }}>
         <h1>Products</h1>
         <div className="btnContainer">
           <button className="btn" onClick={createProductHandler}>
@@ -146,6 +159,7 @@ const ProductListScreen = () => {
           </tbody>
         </table>
       )}
+      <Paginate pages={pages} page={page} isAdmin={true} />
     </div>
   );
 };

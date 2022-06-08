@@ -18,6 +18,9 @@ import {
   ORDER_PAY_FAIL,
   ORDER_PAY_REQUEST,
   ORDER_PAY_SUCCESS,
+  ORDER_STATUS_FAIL,
+  ORDER_STATUS_REQUEST,
+  ORDER_STATUS_SUCCESS,
 } from "../constants/orderConstants";
 import { userLogoutAction } from "./userActions";
 
@@ -220,7 +223,7 @@ export const orderPayVerifyAction = (data) => {
   };
 };
 
-export const orderListAction = () => {
+export const orderListAction = (pageNumber = "") => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: ORDER_LIST_REQUEST });
@@ -229,13 +232,16 @@ export const orderListAction = () => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch("http://localhost:5001/api/orders", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `http://localhost:5001/api/orders?pageNumber=${pageNumber}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -249,7 +255,84 @@ export const orderListAction = () => {
       if (message === "Not authorized, token failed") {
         dispatch(userLogoutAction());
       }
+
       dispatch({ type: ORDER_LIST_FAIL, payload: message });
+    }
+  };
+};
+
+// order pay status update action by admin
+export const orderPayStatusUpdateAction = (order) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: ORDER_PAY_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(
+        `http://localhost:5001/api/orders/${order._id}/pay`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
+
+      const resData = await response.json();
+
+      dispatch({ type: ORDER_PAY_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({ type: ORDER_PAY_FAIL, payload: message });
+    }
+  };
+};
+
+export const updateOrderStatusAction = (order, status) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: ORDER_STATUS_REQUEST });
+
+      const {
+        userLogin: { userInfo },
+      } = getState();
+
+      const response = await fetch(
+        `http://localhost:5001/api/orders/${order._id}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify({ status: status }),
+        }
+      );
+
+      const resData = await response.json();
+
+      dispatch({ type: ORDER_STATUS_SUCCESS, payload: resData });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      if (message === "Not authorized, token failed") {
+        dispatch(userLogoutAction());
+      }
+      dispatch({ type: ORDER_STATUS_FAIL, payload: message });
     }
   };
 };

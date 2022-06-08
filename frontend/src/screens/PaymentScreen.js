@@ -31,18 +31,50 @@ const PaymentScreen = () => {
       <CheckoutSteps step1 step2 step3 />
       <div className="paymentContainer">
         <h1>PAYMENT METHOD</h1>
-        <h2>Select Method</h2>
         <form onSubmit={submitHandler}>
-          <div className="payment-form-control">
+          {/* onSubmit={submitHandler} */}
+          {/* <div className="payment-form-control">
             <label htmlFor="payment">Razorpay</label>
             <input
               type="checkbox"
               name="payment"
               value="Razorpay"
-              checked
               onChange={(e) => setPayMentMethod(e.target.value)}
             />
           </div>
+          <div className="payment-form-control">
+            <label htmlFor="payment">Case On Delivery</label>
+            <input
+              type="checkbox"
+              name="payment"
+              value="cod"
+              onChange={(e) => setPayMentMethod(e.target.value)}
+            />
+          </div> */}
+          <div className="payment-form-control">
+            <label>
+              Razorpay
+              <input
+                type="radio"
+                name="radio"
+                checked
+                value="Razorpay"
+                onChange={(e) => setPayMentMethod(e.target.value)}
+              />
+            </label>
+          </div>
+          <div className="payment-form-control">
+            <label>
+              Cash On Delivery
+              <input
+                type="radio"
+                name="radio"
+                value="cod"
+                onChange={(e) => setPayMentMethod(e.target.value)}
+              />
+            </label>
+          </div>
+
           <button type="submit" className="payMethBtn">
             Continue
           </button>

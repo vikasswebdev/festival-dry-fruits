@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Paginate = ({ pages, page, isAdmin = false, keyword = "" }) => {
+const OrderPaginate = ({ pages, page, isAdmin = false }) => {
   return (
     pages > 0 && (
       <div className="paginateContainer">
@@ -9,13 +9,7 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = "" }) => {
           {[...Array(pages).keys()].map((x) => (
             <li key={x + 1}>
               <Link
-                to={
-                  !isAdmin
-                    ? keyword
-                      ? `/search/${keyword}/page/${x + 1}`
-                      : `/page/${x + 1}`
-                    : `/admin/productlist/${x + 1}`
-                }
+                to={`/admin/orderlist/${x + 1}`}
                 className={page === x + 1 ? "active" : ""}
               >
                 {x + 1}
@@ -28,4 +22,4 @@ const Paginate = ({ pages, page, isAdmin = false, keyword = "" }) => {
   );
 };
 
-export default Paginate;
+export default OrderPaginate;

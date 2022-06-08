@@ -18,7 +18,7 @@ const SearchBox = () => {
     <form onSubmit={seachHandler} className="searchForm">
       <input
         type="text"
-        placeholder="Search"
+        placeholder="Search products..."
         name="q"
         onChange={(e) => setKeyWord(e.target.value)}
       />

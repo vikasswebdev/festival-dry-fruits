@@ -20,6 +20,17 @@ const orderSchema = mongoose.Schema(
         },
       },
     ],
+    status: {
+      type: String,
+      default: "Not processed",
+      enum: [
+        "Not processed",
+        "Processing",
+        "Shipped",
+        "Delivered",
+        "Cancelled",
+      ],
+    },
     shippingAddress: {
       address: { type: String, required: true },
       city: { type: String, required: true },

@@ -51,6 +51,18 @@
   border: 1px solid black;
 }
 
+.profileScreen .userProfile .userInfo .form .logOut{
+  background-color: white;
+  color: black;
+  border: 1px solid black;
+}
+
+.profileScreen .userProfile .userInfo .form .logOut:active {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+}
+
 .profileScreen .userOrders {
   padding: 0 10px;
   flex: 1;
