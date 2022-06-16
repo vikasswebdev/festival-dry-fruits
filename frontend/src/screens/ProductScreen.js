@@ -14,6 +14,7 @@ import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Meta from "../components/Meta";
 
 const ProductScreen = () => {
   const dispatch = useDispatch();
@@ -93,6 +94,7 @@ const ProductScreen = () => {
           </Link>
         </div>
         <div className="productInfo">
+          <Meta title={product.name} description={product.description} />
           <div className="productImage">
             <img src={`${product.image}`} alt="" />
           </div>

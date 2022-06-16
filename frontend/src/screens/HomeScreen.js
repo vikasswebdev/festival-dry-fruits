@@ -7,12 +7,11 @@ import { productsList } from "../actions/productActions";
 import Loader from "../components/Loader";
 import { useParams } from "react-router-dom";
 import Paginate from "../components/Paginate";
+import Meta from "../components/Meta";
 
 const HomeScreen = () => {
   const productList = useSelector((state) => state.productList);
   const { loading, error, products, pages, page } = productList;
-
-  console.log("productList", productList);
 
   const dispatch = useDispatch();
 
@@ -26,6 +25,7 @@ const HomeScreen = () => {
 
   return (
     <>
+      <Meta />
       <SliderCom />
       <div className="productContainer">
         <h1 style={{ fontSize: 36, fontFamily: "sans-serif", marginLeft: 55 }}>
