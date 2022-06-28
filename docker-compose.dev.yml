@@ -1,17 +1,17 @@
 version: '3'
 services:
    mongodb:
-     image: "mongo"
+     image: mongo
      container_name: mongodb
      restart: "always"
      ports: 
          - "27017:27017"
      volumes:
-      - /usr/local/var/mongodb/festival:/data/db   
+      - /Users/vikaspatel/Documents/databases/mongodb/festival:/data/db   
    backend:
     build: 
       dockerfile: Dockerfile.dev
-      context: ./backend/
+      context: ./
     container_name: backend
     restart: always  
     ports:
@@ -20,19 +20,19 @@ services:
       - .env 
     volumes:
       - .:/backend
-      - /backend/node_modules 
+      - node_modules 
       - /frontend  
     depends_on:
       - mongodb
    frontend:
     build:
       dockerfile: Dockerfile.dev
-      context: ./
+      context: ./frontend
     container_name: frontend
     ports:
-      - "3000:3000"  
+      - "3000:3000" 
     env_file:
-      - ./frontend/.env.dev
+      - ./frontend/.env
     volumes:
       - ./frontend:/frontend
       - /frontend/node_modules

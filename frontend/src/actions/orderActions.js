@@ -33,15 +33,18 @@ export const createOrderAction = (order) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch("http://localhost:5001/api/orders", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/orders`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
 
-        body: JSON.stringify(order),
-      });
+          body: JSON.stringify(order),
+        }
+      );
 
       const resData = await response.json();
 
@@ -78,12 +81,15 @@ export const getOrderDetails = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch(`http://localhost:5001/api/orders/${id}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/orders/${id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -115,7 +121,7 @@ export const deliverOrderAction = (order) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/orders/${order._id}/deliver`,
+        `${process.env.REACT_APP_API_URL}/api/orders/${order._id}/deliver`,
         {
           method: "PUT",
           headers: {
@@ -156,7 +162,7 @@ export const listMyOrdersAction = () => {
       } = getState();
 
       const response = await fetch(
-        "http://localhost:5001/api/orders/myorders",
+        `${process.env.REACT_APP_API_URL}/api/orders/myorders`,
         {
           method: "GET",
           headers: {
@@ -195,7 +201,7 @@ export const orderPayVerifyAction = (data) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/orders/payment/verify`,
+        `${process.env.REACT_APP_API_URL}/api/orders/payment/verify`,
         {
           method: "POST",
           headers: {
@@ -233,7 +239,7 @@ export const orderListAction = (pageNumber = "") => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/orders?pageNumber=${pageNumber}`,
+        `${process.env.REACT_APP_API_URL}/api/orders?pageNumber=${pageNumber}`,
         {
           method: "GET",
           headers: {
@@ -272,7 +278,7 @@ export const orderPayStatusUpdateAction = (order) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/orders/${order._id}/pay`,
+        `${process.env.REACT_APP_API_URL}/api/orders/${order._id}/pay`,
         {
           method: "PUT",
           headers: {
@@ -309,7 +315,7 @@ export const updateOrderStatusAction = (order, status) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/orders/${order._id}/status`,
+        `${process.env.REACT_APP_API_URL}/api/orders/${order._id}/status`,
         {
           method: "PUT",
           headers: {

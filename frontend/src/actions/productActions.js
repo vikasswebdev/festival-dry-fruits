@@ -28,7 +28,7 @@ export const productsList = (keyword = "", pageNumber = "") => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
       const response = await fetch(
-        `http://localhost:5001/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
+        `${process.env.REACT_APP_API_URL}/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
       );
       const data = await response.json();
       console.log(data);
@@ -52,7 +52,9 @@ export const productListDetails = (id) => {
   return async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_DETAILS_REQUEST });
-      const response = await fetch(`http://localhost:5001/api/products/${id}`);
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/products/${id}`
+      );
       const resData = await response.json();
       dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: resData });
     } catch (error) {
@@ -76,14 +78,17 @@ export const productCreateAction = () => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch("http://localhost:5001/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-        body: JSON.stringify({}),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/products`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify({}),
+        }
+      );
 
       const resData = await response.json();
       console.log("product Created", resData);
@@ -115,7 +120,7 @@ export const productUpdateAction = (product) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/products/${product._id}`,
+        `${process.env.REACT_APP_API_URL}/api/products/${product._id}`,
         {
           method: "PUT",
           headers: {
@@ -156,13 +161,16 @@ export const productDeleteAction = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch(`http://localhost:5001/api/products/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/products/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -193,7 +201,7 @@ export const createProductReviewAction = (productId, review) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/products/${productId}/reviews`,
+        `${process.env.REACT_APP_API_URL}/api/products/${productId}/reviews`,
         {
           method: "POST",
           headers: {
@@ -233,7 +241,9 @@ export const productTopList = () => {
     try {
       dispatch({ type: PRODUCT_TOP_LIST_REQUEST });
 
-      const response = await fetch("http://localhost:5001/api/products/top");
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/products/top`
+      );
 
       const resData = await response.json();
 

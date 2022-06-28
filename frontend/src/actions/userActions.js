@@ -30,16 +30,19 @@ export const userLoginAction = (email, password) => {
     try {
       dispatch({ type: USER_LOGIN_REQUEST });
 
-      const response = await fetch("http://localhost:5001/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       const resData = await response.json();
 
@@ -77,18 +80,21 @@ export const userRegisterAction = (name, email, number, password) => {
     try {
       dispatch({ type: USER_REGISTER_REQUEST });
 
-      const response = await fetch("http://localhost:5001/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          number,
-          password,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            number,
+            password,
+          }),
+        }
+      );
       const resData = await response.json();
 
       console.log("resData", resData);
@@ -125,12 +131,15 @@ export const getUserDetailsAction = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users/${id}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -165,14 +174,17 @@ export const updateUserProfileAction = (user) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch("http://localhost:5001/api/users/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-        body: JSON.stringify(user),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users/profile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+          body: JSON.stringify(user),
+        }
+      );
 
       const resData = await response.json();
 
@@ -211,12 +223,15 @@ export const listUsersAction = () => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch("http://localhost:5001/api/users", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -246,12 +261,15 @@ export const deleteUser = (id) => {
         userLogin: { userInfo },
       } = getState();
 
-      const response = await fetch(`http://localhost:5001/api/users/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/users/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        }
+      );
 
       const resData = await response.json();
 
@@ -282,7 +300,7 @@ export const updatedUser = (user) => {
       } = getState();
 
       const response = await fetch(
-        `http://localhost:5001/api/users/${user._id}`,
+        `${process.env.REACT_APP_API_URL}/api/users/${user._id}`,
         {
           method: "PUT",
           headers: {
