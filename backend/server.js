@@ -9,6 +9,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -16,26 +17,21 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+// if (process.env.NODE_ENV === "development") {
+app.use(morgan("dev"));
+// }
 
 app.use(express.json());
 app.use(cors());
-
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
-
 app.use("/api/products", productRoute);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 // app.use("/api/payment", paymentRoutes);
-
 app.use(notFound);
 app.use(errorHandler);
-
 app.get("/", (req, res) => {
   res.send("api is running");
 });

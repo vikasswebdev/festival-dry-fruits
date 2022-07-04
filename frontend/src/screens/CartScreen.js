@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
 import { addToCart, removeFromCartAction } from "../actions/cartActions";
+import EmptyCart from "../components/EmptyCart";
 import "../css/cartscreen.css";
 
 const CartScreen = () => {
@@ -44,17 +45,7 @@ const CartScreen = () => {
         </div>
         <div className="cartItems">
           {cartItems.length === 0 ? (
-            <div
-              style={{
-                backgroundColor: "#03a9f433",
-                border: "1px solid #ccc",
-                padding: 2,
-              }}
-            >
-              <p style={{ fontSize: 18, textAlign: "center" }}>
-                Your cart is empty <Link to={"/"}>Go Back</Link>
-              </p>
-            </div>
+            <EmptyCart />
           ) : (
             cartItems.map((item) => (
               <div className="cartProduct" key={item.product}>
@@ -107,8 +98,12 @@ const CartScreen = () => {
         </div>
 
         <div className="checkout">
-          {/* <Link to="/checkout">PROCEED TO CHECKOUT</Link> */}
-          <button onClick={chackOutHandler}> Proceed To Checkout</button>
+          <button
+            disabled={cartItems.length === 0 ? true : false}
+            onClick={chackOutHandler}
+          >
+            Proceed To Checkout
+          </button>
         </div>
       </div>
     </div>

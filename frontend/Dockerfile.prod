@@ -1,0 +1,22 @@
+FROM node:16 as build
+WORKDIR /frontend
+COPY package*.json ./
+RUN npm install
+COPY . ./
+RUN npm run build
+
+FROM ubuntu:20.04
+RUN sudo apt update -y \
+    && sudo apt install nginx -y \
+    && sudo apt install software-properties-common -y \
+    && sudo add-apt-repository ppa:certbot/certbot -y \
+    && sudo apt update -y \
+    && sudo apt install python-certbot-nginx -y \
+    && sudo apt clean
+
+EXPOSE 80    
+STOPSIGNAL SIGTERM
+
+COPY --from=build /build /var/www/html
+
+CMD ["nginx", "-g", "daemon off;"]

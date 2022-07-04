@@ -148,24 +148,6 @@ footer {
   margin: 0 10px;
 }
 
-@media screen and (max-width: 840px) {
-  .header .navigation {
-    display: none;
-  }
-
-  .header .icons {
-    display: none;
-  }
-
-  .header .icons i {
-    display: block;
-  }
-
-  .header .barIcon {
-    display: block;
-    color: white;
-  }
-}
 
 .message {
   position: absolute;
@@ -223,4 +205,28 @@ footer {
 .paginate li a{
   color: black;
   padding: 5px;
+}
+
+@media screen and (max-width: 840px) {
+  .header .navigation {
+    display: none;
+  }
+
+  .header .icons {
+    display: none;
+  }
+
+  .header .icons i {
+    display: block;
+  }
+
+  .header .barIcon {
+    display: block;
+    color: white;
+  }
+
+  .searchForm input{
+    width: 12rem;
+  }
+  
 }

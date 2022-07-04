@@ -6,7 +6,10 @@ const Product = ({ product }) => {
     <div className="productCard">
       <div className="productImage">
         <Link to={`/product/${product._id}`}>
-          <img src={`${product.image}`} alt="" />
+          <img
+            src={`${process.env.REACT_APP_API_URL}${product.image}`}
+            alt=""
+          />
         </Link>
       </div>
       <div className="productInfo">

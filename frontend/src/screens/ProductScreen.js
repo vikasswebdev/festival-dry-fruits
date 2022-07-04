@@ -6,13 +6,10 @@ import {
   createProductReviewAction,
   productListDetails,
 } from "../actions/productActions";
-import {
-  PRODUCT_CREATE_RESET,
-  PRODUCT_REVIEW_RESET,
-} from "../constants/productConstants";
+import { PRODUCT_REVIEW_RESET } from "../constants/productConstants";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Meta from "../components/Meta";
 
@@ -67,6 +64,14 @@ const ProductScreen = () => {
 
   const reviewSubmitHandler = (e) => {
     e.preventDefault();
+
+    if (rating === 0 && comment === "") {
+      toast.error("please select rating and write comment.", {
+        position: "top-center",
+      });
+      return;
+    }
+
     // console.log("review", id, { rating, comment });
     dispatch(createProductReviewAction(id, { rating, comment }));
   };
@@ -96,7 +101,10 @@ const ProductScreen = () => {
         <div className="productInfo">
           <Meta title={product.name} description={product.description} />
           <div className="productImage">
-            <img src={`${product.image}`} alt="" />
+            <img
+              src={`${process.env.REACT_APP_API_URL}${product.image}`}
+              alt=""
+            />
           </div>
           <div className="productDetail">
             <h1>{product.name}</h1>
@@ -115,7 +123,6 @@ const ProductScreen = () => {
             </div>
             <hr />
             <div className="description">
-              {/* <p>{product.description}</p> */}
               <div
                 dangerouslySetInnerHTML={createMarkup(product.description)}
               />
@@ -196,7 +203,7 @@ const ProductScreen = () => {
               </form>
             ) : (
               <div className="loginToReview">
-                Please <Link to="/login">sign in</Link> to write a review{" "}
+                Please <Link to="/login">sign in</Link> to write a review
               </div>
             )}
           </div>
