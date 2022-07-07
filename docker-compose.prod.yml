@@ -17,11 +17,10 @@ services:
     ports:
       - "5001:5001"
     env_file:
-      - .env 
+      - ./backend/.env
     volumes:
-      - .:/backend
-      - node_modules 
-      - /frontend  
+      - ./backend:/backend
+      - /backend/node_modules
     depends_on:
       - mongodb     
   frontend: 
