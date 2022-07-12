@@ -33,7 +33,7 @@ const SliderCom = () => {
               src={`${process.env.REACT_APP_API_URL}${product.image}`}
               alt=""
             />
-            <h3>{product.name}</h3>
+            {/* <h3>{product.name}</h3> */}
           </Link>
         </CarouselItem>
       ))}

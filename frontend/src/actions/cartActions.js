@@ -8,7 +8,7 @@ import {
 export const addToCart = (id, qty) => {
   return async (dispatch, getState) => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}api/products/${id}`
+      `${process.env.REACT_APP_API_URL}/api/products/${id}`
     );
     const resData = await response.json();
 

@@ -92,133 +92,138 @@ const ProductScreen = () => {
           <Loader />
         </div>
       )}
-      <div className="container">
-        <div className="backHome">
-          <Link to="/">
-            <i className="fas fa-arrow-left"></i>
-          </Link>
-        </div>
-        <div className="productInfo">
-          <Meta title={product.name} description={product.description} />
-          <div className="productImage">
-            <img
-              src={`${process.env.REACT_APP_API_URL}${product.image}`}
-              alt=""
-            />
+      <div className="productScreen">
+        <div className="container">
+          <div className="backHome">
+            <Link to="/">
+              <i className="fas fa-arrow-left"></i>
+            </Link>
           </div>
-          <div className="productDetail">
-            <h1>{product.name}</h1>
-            <hr />
-            <div className="rating">
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <i className="fas fa-star"></i>
-              <span> {product.numReviews} reviews</span>
-            </div>
-            <hr />
-            <div className="price">
-              <h3>Price: {product.price} &#8377;</h3>
-            </div>
-            <hr />
-            <div className="description">
-              <div
-                dangerouslySetInnerHTML={createMarkup(product.description)}
+          <div className="productInfo">
+            <Meta title={product.name} description={product.description} />
+            <div className="productImage">
+              <img
+                src={`${process.env.REACT_APP_API_URL}${product.image}`}
+                alt=""
               />
             </div>
-          </div>
-          <div className="priceContainer">
-            <div className="priceCard">
-              <div className="listItem">
-                <p>Price:</p>
-                <p>
-                  <strong>{product.price} &#8377;</strong>
-                </p>
+            <div className="productDetail">
+              <h1>{product.name}</h1>
+              <hr />
+              <div className="rating">
+                <i className="fas fa-star"></i>
+                <i className="fas fa-star"></i>
+                <i className="fas fa-star"></i>
+                <i className="fas fa-star"></i>
+                <i className="fas fa-star"></i>
+                <span> {product.numReviews} reviews</span>
               </div>
-              <div className="listItem">
-                <p>Status:</p>
-                <p> {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}</p>
+              <hr />
+              <div className="price">
+                <h3>Price: {product.price} &#8377;</h3>
               </div>
-              {product.countInStock > 0 && (
+              <hr />
+              <div className="description">
+                <div
+                  dangerouslySetInnerHTML={createMarkup(product.description)}
+                />
+              </div>
+            </div>
+            <div className="priceContainer">
+              <div className="priceCard">
                 <div className="listItem">
-                  <p>Quantity:</p>
-                  <select onChange={(e) => setQty(e.target.value)}>
-                    {[...Array(product.countInStock).keys()].map((x) => (
-                      <option key={x + 1} value={x + 1}>
-                        {x + 1}
-                      </option>
-                    ))}
-                  </select>
+                  <p>Price:</p>
+                  <p>
+                    <strong>{product.price} &#8377;</strong>
+                  </p>
+                </div>
+                <div className="listItem">
+                  <p>Status:</p>
+                  <p>
+                    {" "}
+                    {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}
+                  </p>
+                </div>
+                {product.countInStock > 0 && (
+                  <div className="listItem">
+                    <p>Quantity:</p>
+                    <select onChange={(e) => setQty(e.target.value)}>
+                      {[...Array(product.countInStock).keys()].map((x) => (
+                        <option key={x + 1} value={x + 1}>
+                          {x + 1}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                <div className="listItem" style={{ justifyContent: "center" }}>
+                  <button
+                    onClick={addToCartHandler}
+                    className="addToCart"
+                    disabled={product.countInStock === 0}
+                  >
+                    Add to cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="reviewContainer">
+            <div className="writeReview">
+              <h1>Write a Review</h1>
+              {loadingReview && <div>Loading...</div>}
+              {userInfo ? (
+                <form onSubmit={reviewSubmitHandler}>
+                  <div className="form-control">
+                    <label htmlFor="rating">Rating</label>
+                    <select
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                      name="rating"
+                      id="rating"
+                    >
+                      <option value="">Select...</option>
+                      <option value="1">1 - Poor</option>
+                      <option value="2">2 - Fair</option>
+                      <option value="3">3 - Good</option>
+                      <option value="4">4 - Very Good</option>
+                      <option value="5">5 - Excellent</option>
+                    </select>
+                  </div>
+                  <div className="form-control">
+                    <label htmlFor="comment">Comment</label>
+                    <textarea
+                      name="comment"
+                      id="comment"
+                      cols="30"
+                      rows="10"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="submitReview">
+                    Submit Review
+                  </button>
+                </form>
+              ) : (
+                <div className="loginToReview">
+                  Please <Link to="/login">sign in</Link> to write a review
                 </div>
               )}
-              <div className="listItem" style={{ justifyContent: "center" }}>
-                <button
-                  onClick={addToCartHandler}
-                  className="addToCart"
-                  disabled={product.countInStock === 0}
-                >
-                  Add to cart
-                </button>
-              </div>
             </div>
-          </div>
-        </div>
-        <div className="reviewContainer">
-          <div className="writeReview">
-            <h1>Write a Review</h1>
-            {loadingReview && <div>Loading...</div>}
-            {userInfo ? (
-              <form onSubmit={reviewSubmitHandler}>
-                <div className="form-control">
-                  <label htmlFor="rating">Rating</label>
-                  <select
-                    value={rating}
-                    onChange={(e) => setRating(e.target.value)}
-                    name="rating"
-                    id="rating"
-                  >
-                    <option value="">Select...</option>
-                    <option value="1">1 - Poor</option>
-                    <option value="2">2 - Fair</option>
-                    <option value="3">3 - Good</option>
-                    <option value="4">4 - Very Good</option>
-                    <option value="5">5 - Excellent</option>
-                  </select>
+            <hr />
+            {product.reviews.length === 0 && <h1>No Reviews</h1>}
+            {product.reviews.map((review) => (
+              <div key={review._id}>
+                <h3>{review.name}</h3>
+                <Rating value={review.rating} />
+                <p>{review.createdAt.substring(0, 10)}</p>
+                <div className="reviewDesc">
+                  <p>{review.comment}</p>
                 </div>
-                <div className="form-control">
-                  <label htmlFor="comment">Comment</label>
-                  <textarea
-                    name="comment"
-                    id="comment"
-                    cols="30"
-                    rows="10"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                  ></textarea>
-                </div>
-                <button type="submit" className="submitReview">
-                  Submit Review
-                </button>
-              </form>
-            ) : (
-              <div className="loginToReview">
-                Please <Link to="/login">sign in</Link> to write a review
               </div>
-            )}
+            ))}
           </div>
-          <hr />
-          {product.reviews.length === 0 && <h1>No Reviews</h1>}
-          {product.reviews.map((review) => (
-            <div key={review._id}>
-              <h3>{review.name}</h3>
-              <Rating value={review.rating} />
-              <p>{review.createdAt.substring(0, 10)}</p>
-              <div className="reviewDesc">
-                <p>{review.comment}</p>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </>

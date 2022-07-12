@@ -242,7 +242,10 @@ const OrderScreen = () => {
                     {order.orderItems.map((item, index) => (
                       <div className="orderItem" key={item._id}>
                         <div className="orderItemImg">
-                          <img src={item.image} alt={item.name} />
+                          <img
+                            src={`${process.env.REACT_APP_API_URL}${item.image}`}
+                            alt={item.name}
+                          />
                         </div>
                         <Link to={`/product/${item.product}`}>{item.name}</Link>
                         <p>
