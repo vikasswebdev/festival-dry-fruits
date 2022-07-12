@@ -103,7 +103,10 @@ const PlaceOrderScreen = () => {
                 cart.cartItems.map((item, index) => (
                   <div className="orderItem" key={index}>
                     <div className="orderItemImg">
-                      <img src={item.image} alt={item.name} />
+                      <img
+                        src={`${process.env.REACT_APP_API_URL}${item.image}`}
+                        alt={item.name}
+                      />
                     </div>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
                     <p>

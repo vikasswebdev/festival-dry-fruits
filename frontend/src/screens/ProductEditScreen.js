@@ -62,16 +62,20 @@ const ProductEditScreen = () => {
   const uploadHandler = async (e) => {
     const file = e.target.files;
 
+    // console.log("files", file[0]);
+
     const formData = new FormData();
     formData.append("image", file[0]);
 
+    // console.log("formData", formData);
+
     try {
-      const data = await fetch("http://localhost:5001/api/upload", {
+      const data = await fetch(`http://localhost:5001/api/upload`, {
         method: "POST",
         body: formData,
       });
       const response = await data.json();
-      // console.log(response);
+      console.log("response", response);
       setImage(response);
     } catch (error) {
       console.log(error);

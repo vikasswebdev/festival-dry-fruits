@@ -50,6 +50,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
 }
 
 .placeOrderInfo {
@@ -60,6 +61,10 @@
 .placeOrderInfo .left {
   flex: 1;
   margin: 0 10px;
+}
+
+.placeOrderInfo .left .shipping p {
+  margin: 15px;
 }
 
  .status{
@@ -77,6 +82,8 @@
 .status p {
   margin-left: 20px;
 }
+
+
 
 .placeOrderInfo .right {
   flex: 0.7;

@@ -1,4 +1,4 @@
-import path from "path";
+import path, { join } from "path";
 import multer from "multer";
 import express from "express";
 
@@ -37,6 +37,7 @@ const upload = multer({
 });
 
 router.post("/", upload.single("image"), (req, res) => {
+  // console.log("res", res);
   res.json(`/${req.file.path}`);
 });
 

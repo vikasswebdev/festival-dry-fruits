@@ -24,6 +24,7 @@ import AdminScreen from "./screens/admin/AdminScreen";
 import { useEffect } from "react";
 import ScrollToTop from "./components/ScrollToTop";
 import Page404 from "./screens/Page404";
+import MobileBottomTabs from "./components/MobileBottomTabs";
 
 function App() {
   const location = useLocation();
@@ -71,6 +72,7 @@ function App() {
         </Routes>
       </main>
       {myLocation ? null : <Footer />}
+      <MobileBottomTabs />
     </>
   );
 }
