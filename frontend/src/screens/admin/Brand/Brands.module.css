@@ -1,0 +1,143 @@
+.brandsScreen{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.brandsScreen__header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.brandsScreen__button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #573b31;
+    color: white;
+}
+
+.brandsScreen__button:active{
+    transform: scale(0.95);
+}
+
+
+.brandsScreen__body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.brandsScreen__body__item{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.brandsScreen__body__item_link{
+    text-decoration: none;
+    width: 100%;
+    color: black;
+}
+
+.brandsScreen__body__item__image{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.brandsScreen__body__item__image img{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+/* // edit brand */
+
+.EditBrandScreen{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 70%;
+}
+
+.formControl{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    width: 100%;
+}
+
+.formControl label{
+    font-size: 16px;
+    font-weight: 600;
+    color: gray;
+    margin-bottom: 10px;
+}
+
+.formControl input, .formControl textarea{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: gray;
+}
+
+.formControl input:focus, .formControl textarea:focus{
+    outline: none;
+    border: 1px solid #573b31;
+}
+
+.formControl input[type="checkbox"]{
+    width: 20px;
+    height: 20px;
+    background-color: #ccc;
+    margin-left: 10px;
+}
+.addBrandBtn{
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    width: 25%;
+    background-color: #573b31;
+    align-self: flex-start;
+}
+
+.addBrandBtn:active{
+    transform: scale(0.95);
+}

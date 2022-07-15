@@ -205,7 +205,9 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
 // @access  Private
 
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const order = await Order.find({ user: req.user._id });
+  const order = await Order.find({ user: req.user._id }).sort([
+    ["createdAt", "descending"],
+  ]);
   res.json(order);
 });
 

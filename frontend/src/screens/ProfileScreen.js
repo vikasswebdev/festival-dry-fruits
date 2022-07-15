@@ -188,7 +188,7 @@ const ProfileScreen = () => {
                               : order.status === "Processing"
                               ? "blue"
                               : order.status === "Shipped"
-                              ? "yellow"
+                              ? "#e91e63"
                               : order.status === "Delivered"
                               ? "green"
                               : "red",

@@ -7,6 +7,8 @@ import ProductListScreen from "../ProductListScreen";
 import UserEditScreen from "../UserEditScreen";
 import UserListScreen from "../UserListScreen";
 import "./Admin.css";
+import Brands from "./Brand/Brands";
+import EditBrand from "./Brand/EditBrand";
 
 const AdminScreen = () => {
   const location = useLocation();
@@ -37,6 +39,8 @@ const AdminScreen = () => {
             />
             <Route path="/user/:id/edit" element={<UserEditScreen />} />
             <Route path="/product/:id/edit" element={<ProductEditScreen />} />
+            <Route path="/brands" element={<Brands />} />
+            <Route path="/brands/add" element={<EditBrand />} />
           </Routes>
         </div>
       </div>
