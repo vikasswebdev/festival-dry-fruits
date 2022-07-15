@@ -12,7 +12,7 @@ const Sidebar = () => {
             fontSize: "2rem",
           }}
         >
-          DASHBOARD
+          Admin
         </h2>
       </div>
       <div className="body">
@@ -42,6 +42,13 @@ const Sidebar = () => {
               }
             >
               Products
+            </li>
+          </Link>
+          <Link to="/admin/brands">
+            <li
+              className={location.pathname === "/admin/brands" ? "active" : ""}
+            >
+              Brands
             </li>
           </Link>
         </ul>

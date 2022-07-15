@@ -137,7 +137,8 @@
 
 .orderContainer{
   /* background-color: red; */
-  padding: 10px;
+  max-height: 85vh;
+  overflow: scroll;
 }
 
 .orderItem{

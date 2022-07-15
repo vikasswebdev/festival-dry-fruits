@@ -6,10 +6,7 @@ import {
   productUpdateAction,
 } from "../actions/productActions";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  PRODUCT_UPDATE_RESET,
-  PRODUCT_UPDATE_SUCCESS,
-} from "../constants/productConstants";
+import { PRODUCT_UPDATE_RESET } from "../constants/productConstants";
 
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
@@ -61,8 +58,6 @@ const ProductEditScreen = () => {
 
   const uploadHandler = async (e) => {
     const file = e.target.files;
-
-    // console.log("files", file[0]);
 
     const formData = new FormData();
     formData.append("image", file[0]);

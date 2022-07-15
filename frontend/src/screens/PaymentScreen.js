@@ -53,7 +53,7 @@ const PaymentScreen = () => {
           </div> */}
           <div className="payment-form-control">
             <label>
-              Razorpay
+              online
               <input
                 type="radio"
                 name="radio"

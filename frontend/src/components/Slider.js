@@ -16,6 +16,10 @@ const SliderCom = () => {
     dispatch(productTopList());
   }, [dispatch]);
 
+  const createMarkup = (html) => {
+    return { __html: html };
+  };
+
   return loading ? (
     <Loader />
   ) : error ? (
@@ -25,15 +29,27 @@ const SliderCom = () => {
       {products.map((product, index) => (
         <CarouselItem key={product._id}>
           <Link
-            style={{ width: "100%", height: 550 }}
             to={`/product/${product._id}`}
+            style={{ width: "100%", height: 500 }}
           >
-            <img
-              style={{ width: "100%", height: "100%" }}
-              src={`${process.env.REACT_APP_API_URL}${product.image}`}
-              alt=""
-            />
-            {/* <h3>{product.name}</h3> */}
+            <div
+              style={{
+                backgroundImage: `url(${process.env.REACT_APP_API_URL}${product.image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                height: "100%",
+                width: "100%",
+                backgroundClip: "content-box",
+              }}
+            >
+              <div className="carousel-caption">
+                <h1>{product.name}</h1>
+                <button className="sliderBtn">
+                  Buy Now <i className="fas fa-shopping-cart"></i>
+                </button>
+              </div>
+            </div>
           </Link>
         </CarouselItem>
       ))}
